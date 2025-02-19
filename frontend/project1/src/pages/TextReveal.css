@@ -1,0 +1,72 @@
+@keyframes fadeInWord {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.heading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+  max-width: 90%;
+  text-transform: uppercase;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-shadow: 2px 3px 3px black;
+  gap: 5px;
+}
+
+.word {
+  opacity: 0;
+  animation: fadeInWord 0.5s ease-in-out forwards;
+}
+
+.text-image-wrapper{
+  content: "";
+  clear: both;
+  display: table;
+  margin-top: 12%;
+  width:80%;
+  margin-left:5%;
+  margin-right: 5%;
+
+}
+
+
+
+.desc{
+  color: black;
+  text-align: center;
+  font-size: 1.8rem;
+  max-width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-shadow: 2px 3px 3px white;
+  gap: 5px;
+}
+
+.text-reveal-image{
+  width:45%;
+  height:45%;
+ border-radius: 5%;
+ 
+}
+
+.text-reveal-image[style*="float: left"] {
+  margin-right: 8%; 
+}
+
+.text-reveal-image[style*="float: right"] {
+  margin-left: 8%; 
+}
