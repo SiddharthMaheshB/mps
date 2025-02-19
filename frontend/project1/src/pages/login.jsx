@@ -12,8 +12,10 @@ const Login = ()=>{
     return (
         <div>
             <BackVideo imgUrl={vid1} child={(
+                <>
+                <h1>Login</h1>
                 <form onSubmit={handleSubmit}>
-                    <h1>Login</h1>
+                    
                     <label>Username:
                         <input type="text"
                         value={Username}
@@ -26,8 +28,9 @@ const Login = ()=>{
                         onChange={(e)=>setPassword(e.target.value)}/>
                     </label>
                     <br/>
-                    <input type="submit"/>
+                    <input type="submit" value ="Log in" id="submit"/>
                 </form>  
+                </>
             )}/>
             
         </div>

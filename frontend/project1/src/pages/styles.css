@@ -23,11 +23,37 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 35%;
+    width: 30%;
     border-radius: 15px;
     z-index: 1;
     color: white;
-    background-color: yellow;
+    /*background-color: yellow;*/
     text-align: center;
     
+}
+
+.content form{
+    text-align: left;
+   
+}
+
+.content form label{
+    margin-left: 10%;
+}
+.content form input{
+    margin-left: 10%;
+    margin-bottom: 5%;
+    width:80%;
+    height:80%;
+}
+
+.content #submit{
+    text-align: center;
+    position: relative;
+    margin-left: 0px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width:20%;
+    height:30%;
 }
