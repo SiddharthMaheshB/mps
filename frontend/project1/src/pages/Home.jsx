@@ -8,19 +8,17 @@ import Pic5 from "../frontimages/5.jpg";
 import "./TextReveal.css"
 import { useState,useRef } from "react";
 import Footer from "./Footer";
+import { useOutletContext } from "react-router-dom";
+
 const text = "The future of farming is smart sustainable, and limitless";
 const words = text.split(" ");
-export default function Home(props){
-  const featuresRef = useRef(null);
-  const footerRef = useRef(null);
 
-  const scrollToFooter = () => {
-    footerRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
-  const scrollToFeatures = () => {
-    featuresRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+ function Home(props){
+  
+ 
+  const {featuresRef,footerRef} = useOutletContext();
+ 
    const myStyle = {
       padding:0,
       top:0,
@@ -94,3 +92,6 @@ export default function Home(props){
     </>
   )
 }
+
+
+export default Home

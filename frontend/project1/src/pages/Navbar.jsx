@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import Logo from "./Logo"
 import { useState,useRef } from "react";
-function Navbar({ login, scrollToFooter, scrollToFeatures  }) {
+
+const scrollTo= (ref)=>{
+  console.log("Hello world");
+    console.log(ref)
+    console.log(ref.current)
+    ref.current.scrollIntoView({behavior:"smooth"})
+    
+}
+function Navbar({ login, ToFooter, ToFeatures  }) {
   if(login)
     return (
       <nav style={styles.navbar}>
@@ -19,9 +27,9 @@ function Navbar({ login, scrollToFooter, scrollToFeatures  }) {
     <nav style={styles.navbar}>
       <Logo  style={styles.logo}/>
       <div>
-        <Link to="/" style={styles.link}>Home</Link>
-        <button onClick={scrollToFeatures} style={styles.link}>About</button>
-        <button onClick={scrollToFooter} style={styles.link}>Contact</button>
+        
+        <button onClick={()=>scrollTo(ToFeatures)} style={styles.link}>About</button>
+        <button onClick={()=>scrollTo(ToFooter)} style={styles.link}>Contact</button>
 
       <Link style={styles.button} to="/login">Login</Link>
       <Link style={styles.button} to="/register">Register</Link>
@@ -29,6 +37,9 @@ function Navbar({ login, scrollToFooter, scrollToFeatures  }) {
     </nav>
   );
 }
+
+
+
 
 const styles = {
   navbar: {

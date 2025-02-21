@@ -3,6 +3,7 @@ import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import Layout from "./pages/Layout.jsx"
 import Home from "./pages/Home.jsx"
 import Login from './pages/login.jsx'
+import Register from './pages/Register.jsx'
 import Box2 from './pages/Box2.jsx'
 import Notfound from './pages/Notfound.jsx'
 import "./pages/styles.css"
@@ -13,11 +14,12 @@ function App(props) {
     <Routes>
     <Route path="/" element={<Layout login = {loginb} />}>
     <Route index element={<Home login={loginb} />}/>
-    <Route path = "login" element = {<Login/>}/>
+    
     <Route path = "box" element  = {<Box2/>}/>
     <Route path = "*" element = {<Notfound/>}/>
     </Route>
-    
+    <Route path = "login" element = {<Login/>}/>
+    <Route path = "register" element={<Register/>}/>
     </Routes>
     </BrowserRouter>
     
