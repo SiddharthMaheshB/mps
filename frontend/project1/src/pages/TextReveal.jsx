@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./TextReveal.css";
 
-function TextReveal({ text, ClassName,imageUrl,imagePos="left" }) {
+function TextReveal({ text, ClassName,imageUrl,imagePos="left",link="" }) {
   const words = text.split(" ");
   const [isRendered, setIsRendered] = useState(false);
   const ref = useRef(null);
@@ -68,6 +68,7 @@ function TextReveal({ text, ClassName,imageUrl,imagePos="left" }) {
     </div>
   );
 })()}
+    {link!=""&& <a href={link} className="cta-button">Get Started</a>} 
     </div>
     </div>
   );

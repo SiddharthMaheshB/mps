@@ -15,9 +15,11 @@ function Navbar({ login, ToFooter, ToFeatures  }) {
       <nav style={styles.navbar}>
        <Logo style={styles.logo}/>
         <div>
+        
+          <Link to="/social" style={styles.link}>Social</Link>
+          <Link to="/Shop" style = {styles.link}>Shop</Link>
+          <Link to = "/data" style ={styles.link}>Farmer's Corner</Link> 
           <Link to="/profile" style={styles.link}>Profile</Link>
-          <Link to="/Social" style={styles.link}>Social</Link>
-          <Link to="/contact" style={styles.link}>Contact</Link>
           <button style={styles.button}>Logout</button> 
         </div>
       </nav>

@@ -5,12 +5,20 @@ import Pic2 from "../frontimages/1.jpg";
 import Pic3 from "../frontimages/3.jpg";
 import Pic4 from "../frontimages/4.jpg";
 import Pic5 from "../frontimages/5.jpg";
+import Fertilisers from "../Afterloginimages/fert2.jpg"
+import Pest from "../Afterloginimages/pest.jpg"
+import SmIr from "../Afterloginimages/Ir.jpg"
+import Cy from "../Afterloginimages/cropyield.jpg"
+import Colab from "../Afterloginimages/colab.jpg"
 import "./TextReveal.css"
 import { useState,useRef } from "react";
 import Footer from "./Footer";
 import { useOutletContext } from "react-router-dom";
+import Bg1 from "../frontimages/2.webp"
+import { Backdrop } from "@react-three/drei";
 
 const text = "The future of farming is smart sustainable, and limitless";
+
 const words = text.split(" ");
 
 
@@ -30,11 +38,64 @@ const words = text.split(" ");
       backgroundRepeat: "no-repeat",
       boxSizing: "border-box",
     }
+
+    const myStyle2 = {
+      padding:0,
+      top:0,
+      left:0,
+      backgroundImage :  `radial-gradient(circle, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${Bg1})`,
+      height: "100vh",
+      width: "100%",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat", 
+      boxSizing: "border-box",
+    }
+  const features = [
+    "Smart Pest & Disease Detection - Identifies crop diseases early,recommends organic pesticides, reducing losses and improving yields.",
+    "Organic Fertilizer Recommendation - Analyzes soil nutrients and crop requirements to suggest the best organic fertilizers, enhancing soil health and boosting sustainable farming.",
+    "Smart Irrigation Management - Uses real-time temperature, pH, and moisture data to optimize water usage, ensuring crops receive the right amount of water while conserving resources.",
+    "Real-time Crop Revenue and Yield Prediction - Leverages AI and data analytics to forecast crop yield and market revenue, helping farmers make informed decisions and maximize profits.",
+    "Organic Farming Tutorials and Videos - Provides step-by-step guides and video tutorials on organic farming techniques, covering composting, natural pest control, and eco-friendly cultivation practices.",
+  ]
+  const fmages = [Pest,Fertilisers,SmIr,Cy,Colab]
+  const links = [
+    "/pest-disease-detection",
+    "/fertilizer-recommendation",
+    "/smart-irrigation",
+     "/crop-revenue-prediction",
+     "/organic-farming-tutorials"
+  ]
   if(props.login)return(
-    <div>
-      <h1>After Login</h1>
+  <>
+    <div style={myStyle2}>
+      <h1 className="heading">
+        {words.map((word, index) => (
+          <span key={index} className="word" style={{ animationDelay: `${index * 0.09}s` }}>
+            {word}
+          </span>
+        ))}
+      </h1>
     </div>
+    <div>
+     {features.map((element, index) => {
+      const currentPos = index % 2 === 0 ? "left" : "right";
+      const butPos = currentPos=="left"?"right":"left"; 
+      return (
+        <div key={index} className="feature-container">
+        <TextReveal key={index} text={element} ClassName={"desc"} imageUrl={fmages[index]} imagePos={currentPos} link={links[index]}/>
+        </div>
+      );
+    })}
+    </div>
+     <br/>
+    <br/>
+    <br/>
+    <Footer/>
+  </>
   )
+
+
+
   const hstyle={
     position: "absolute",
     top: "50%",
@@ -62,7 +123,7 @@ const words = text.split(" ");
     "Global Accessibility for Farmers - A user-friendly platform designed to help farmers worldwide with AI-driven solutions.",*/
   ]
   const images = [Pic2,Pic3,Pic4,Pic5]
-  const [pos,setPos] = useState(false)
+
   return (
     <>
     <div style={myStyle}>

@@ -7,8 +7,9 @@ import Register from './pages/Register.jsx'
 import Box2 from './pages/Box2.jsx'
 import Notfound from './pages/Notfound.jsx'
 import "./pages/styles.css"
+import FarmScene from './pages/Social.jsx'
 function App(props) {
- const loginb = false;
+ const loginb = true;
   return (
     <BrowserRouter>
     <Routes>
@@ -17,6 +18,7 @@ function App(props) {
     
     <Route path = "box" element  = {<Box2/>}/>
     <Route path = "*" element = {<Notfound/>}/>
+    <Route path = "social" element = {<FarmScene/>}/>
     </Route>
     <Route path = "login" element = {<Login/>}/>
     <Route path = "register" element={<Register/>}/>
