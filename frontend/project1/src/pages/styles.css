@@ -1,0 +1,175 @@
+
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+}
+
+.background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+   
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35%;
+    height: max-content;
+    border-radius: 15px;
+    z-index: 1;
+    color: white;
+    /*background-color: yellow;*/
+    text-align: center;
+    padding-top: 1%; 
+    font-size: larger;
+   /*rgba(139, 69, 19, 0.8),rgba(25, 117, 16, 0.795),rgba(85, 107, 47, 0.8)*/;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 0px 10px rgba(85, 107, 47, 0.8);
+    transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+.content h1{
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: 2.5%;
+}
+
+
+
+.content form{
+    text-align: left;
+    box-sizing: border-box; 
+    max-width: inherit;
+    max-height: inherit;
+}
+
+#password label input{
+    margin-bottom: 1.5%;
+
+}
+
+#password a{
+    text-decoration: none;
+    margin:0px;
+   
+    margin-left: 12%;
+    font-size:0.9rem;
+    color:#1d5521;
+}
+.logo-container{
+    position: absolute;
+    color: white;
+    top: 1rem;
+    left:3%;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.logo-container a{
+    color: inherit;
+    text-decoration: none;
+}
+.content form label{
+    margin-left: 10%;
+    font-size: 1.2rem;
+}
+.content form input{
+    margin-left: 10%;
+    margin-bottom: 5vh;
+    width:80%;
+    height: 5vh;
+    border-radius: 15px;
+    outline:none;
+    border: none;
+    padding-left: 5%;
+
+}
+.button-container{
+    display: flex;
+    flex-direction: row;
+}
+.content #submit{
+    padding-left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 0vh;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    margin-bottom: 0px;
+    font-weight: 500; 
+    background-color: white;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    transition: background-color .3s, box-shadow .3s;
+    width:30%;
+    height:8vh;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    &:hover {
+        outline: none;
+        box-shadow: 
+          0 -1px 0 rgba(0, 0, 0, .04),
+          0 2px 4px rgba(0, 0, 0, .25),
+          0 0 0 3px #5d8819;
+
+      }
+      
+    
+}
+
+.login-with-google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; 
+    width: auto;
+    padding: 1% 2%;
+    
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 50px;
+    background-color: white;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=');
+    background-repeat: no-repeat;
+    background-size: 10%;
+    background-position: 8% ;
+    padding-left: 8%;
+}
+
+.login-with-google-btn:hover {
+    &:hover {
+        outline: none;
+        box-shadow: 
+          0 -1px 0 rgba(0, 0, 0, .04),
+          0 2px 4px rgba(0, 0, 0, .25),
+          0 0 0 3px #5d8819;/*#a59228;*/
+
+      }
+}
+
+a{
+    color:#1d5521;
+}
