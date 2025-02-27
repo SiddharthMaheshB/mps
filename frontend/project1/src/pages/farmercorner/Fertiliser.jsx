@@ -1,14 +1,14 @@
-export default function Shop({login}){
+export default function Fertiliser({login}){
     if(!login){
         return(
             <>
-            <p>404 Not found</p>
+            <h1>404 Not Found!!</h1>
             </>
         )
     }
     return(
         <>
-        <p>This is Shop</p>
+        <h1>This is fertiliser</h1>
         </>
     )
 }

@@ -59,11 +59,11 @@ const words = text.split(" ");
   ]
   const fmages = [Pest,Fertilisers,SmIr,Cy,Colab]
   const links = [
-    "/pest-disease-detection",
-    "/fertilizer-recommendation",
-    "/smart-irrigation",
-     "/crop-revenue-prediction",
-     "/organic-farming-tutorials"
+    "/farmercorner/pest-disease-detection",
+    "/farmercorner/fertilizer-recommendation",
+    "/farmercorner/smart-irrigation",
+     "/farmercorner/crop-revenue-prediction",
+     "/farmercorner/organic-farming-tutorials"
   ]
   if(props.login)return(
   <>

@@ -1,0 +1,235 @@
+.section-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    box-sizing: border-box;
+    margin-top: 3%;
+    margin-left: 1%;
+    margin-right:1.2%;
+}
+.section1 {
+    background: rgba(255, 255, 255, 0.4); /* Slight transparency */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft floating shadow */
+    backdrop-filter: blur(10px); /* Glass effect */
+    border-radius: 15px; /* Smooth edges */
+    margin-right: 0.8%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Effect: Slight lift to reinforce the floating illusion */
+.section1:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.section2 {
+    background: rgba(255, 255, 255, 0.2); /* Slight transparency */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft floating shadow */
+    backdrop-filter: blur(10px); /* Glass effect */
+    border-radius: 15px; /* Smooth edges */
+    margin-right: 0.8%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Effect: Slight lift to reinforce the floating illusion */
+.section2:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+.section3 {
+    background: rgba(255, 255, 255, 0.2); /* Slight transparency */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft floating shadow */
+    backdrop-filter: blur(10px); /* Glass effect */
+    border-radius: 15px; /* Smooth edges */
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Effect: Slight lift to reinforce the floating illusion */
+.section3:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+.section1{
+    display: flex;
+    flex-direction: column;
+    width:32%;
+    flex-grow: 1.05;
+    
+
+}
+
+.dragdropbox{
+    margin:2%;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    text-align: center;
+    background:  linear-gradient(to bottom, rgba(200, 200, 200, 0.9), rgb(220, 220, 220));
+    border-radius: 5%;
+    border-style: dashed;
+    border-color: rgba(168, 168, 168, 0.9);
+    color:rgb(50,50,50)
+}
+.dragdropbox:hover{
+    box-shadow: rgb(50,50,50);
+
+}
+.dragdropbox p {
+    font-size: 1rem;
+    color: rgb(70, 70, 70);
+}
+
+.dragdropbox svg {
+    font-size: 2rem;
+    color: rgb(90, 90, 90);
+}
+/*
+.cameracapturebutton{
+
+}*/
+.video-container{
+    position: relative;
+    display: flex;
+    margin:0Px;
+    margin-left: 5%;
+    margin-top: 2%;
+    flex-direction: column;
+    align-items: center;
+    height:40vh;
+    width:90%;
+    scrollbar-width: 0%;
+
+}
+
+.inputheading {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    color: rgb(45, 45, 45);
+    margin-bottom: 12px;
+}
+
+.cameracapturebutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    margin-left: 5%;
+    padding: 12px;
+    background: linear-gradient(to right, rgb(255, 160, 130), rgb(230, 120, 150));  /* Warm earthy tones */
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.cameracapturebutton:hover {
+    background:linear-gradient(to right, rgb(240, 140, 120), rgb(210, 100, 130));/* Darker on hover */
+    transform: scale(1.02);
+}
+
+.crop-type {
+    width: 90%;
+    margin-left: 5%;
+    padding: 12px;
+    font-size: 1rem;
+    margin-top: 2%;
+   
+    border: 2px solid rgb(180, 150, 220);
+    border-radius: 8px;
+    background: linear-gradient(to right, rgb(220, 200, 250), rgb(180, 160, 230)); 
+   
+    color: rgb(50, 50, 90);
+    cursor: pointer;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+.crop-type:hover{
+    transform: scale(1.02) ;
+    transition: 0.3s ease;
+}
+.crop-type:focus {
+    border-color: rgb(160, 130, 200);
+    box-shadow: 0 0 8px rgba(160, 130, 200, 0.5);
+}
+
+.preview {
+    margin-top: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.preview img {
+   
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid rgb(90, 90, 120);
+}
+/*
+.video-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}*/
+
+.video {
+    width: 100%;
+    border-radius: 8px;
+    border: 2px solid rgb(100, 100, 130);
+    scrollbar-width: 0%;
+}
+/*
+button:disabled {
+    background: rgb(160, 160, 170);
+    color: rgb(90, 90, 100);
+    cursor: not-allowed;
+}*/
+
+.hidden {
+    display: none;
+}
+
+.detect-button {
+    margin-top: 2%;
+    margin-left: 5%;
+    width: 90%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, margin-top 0.3s ease-in-out;
+    background: linear-gradient(to right, rgb(85, 85, 85), rgb(50, 50, 50)); /* Deep blue gradient */
+    color: white;
+}
+
+.preview.fade-out + .detect-button {
+    margin-top: 10%; /* Adjust this value for smoother movement */
+}
+
+.detect-button:hover {
+    background: linear-gradient(to right, rgb(60, 60, 60), rgb(30, 30, 30));  /* Slightly darker on hover */
+    transform: scale(1.02);
+}
+
+.detect-button:disabled {
+    background: rgb(120, 120, 140);
+    color: rgb(180, 180, 190);
+    cursor: not-allowed;
+}
+
+.video-container button{
+    margin-top: 1%;
+    width: 50%;
+    height:5vh;
+}
+
+
+

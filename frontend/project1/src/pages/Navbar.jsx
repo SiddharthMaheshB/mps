@@ -18,7 +18,7 @@ function Navbar({ login, ToFooter, ToFeatures  }) {
         
           <Link to="/social" style={styles.link}>Social</Link>
           <Link to="/Shop" style = {styles.link}>Shop</Link>
-          <Link to = "/data" style ={styles.link}>Farmer's Corner</Link> 
+          <Link to = "/farmercorner" style ={styles.link}>Farmer's Corner</Link> 
           <Link to="/profile" style={styles.link}>Profile</Link>
           <button style={styles.button}>Logout</button> 
         </div>
