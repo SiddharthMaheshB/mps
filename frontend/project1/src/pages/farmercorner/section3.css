@@ -1,21 +1,24 @@
 .section3{
 
     
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex-grow: 0.9;
-        width: 30%;  /* Ensure full width */
-        height: 100%; /* Ensure full height */
-        box-sizing: border-box;
-        padding-left: 1%;
-        overflow: hidden; /* Prevent scrolling */
+    width: 30%;  /* Ensure full width */
+    height: 100%;
+    padding-left: 1%;
+    box-sizing: border-box;
+
+         /* Prevent scrolling */
     
     
 }
 
 .rec-container{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 0.9;
     box-sizing: border-box;
+
 }
 .remedy-container{
     display: flex;
@@ -35,13 +38,14 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    box-sizing: border-box;list-style: none;
+    box-sizing: border-box;
+    list-style: none;
     overflow: hidden; /* No scrolling */
 }
 
 .TabList {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding: 0.5rem;
     background: #f8f9fa; /* Light background */
@@ -50,7 +54,8 @@
     margin-bottom: 10px;
     list-style: none;
   
-    overflow-x: auto; /* Allows scrolling for small screens */
+    /* Allows scrolling for small screens */
+
     box-sizing: border-box;
 }
 

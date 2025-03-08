@@ -3,7 +3,7 @@ import ImageUploader from "./Imageuploader"
 import Analysis from "./Analysis"
 import Recommendations from "./Recommendations"
 import image from "/4.jpg"
-import Footer from "../Footer.jsx"
+
 export default function Pest({login}){
     if(!login){
         return(
@@ -17,7 +17,8 @@ export default function Pest({login}){
       
         <div className="section-container">
         <div className="section1">
-            <ImageUploader/>
+        <h4 className="inputheading">Upload an Image for Pest Detection</h4>
+            <ImageUploader buttonname={"Detect Pest-Disease"}/>
         </div>
         <div className="section2">
             <Analysis severity={60} pesticide={"musk"} confidence={70} image={image} />

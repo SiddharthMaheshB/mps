@@ -45,15 +45,18 @@
      /* Ensures half-circle shape */
     overflow: hidden; /* Clip excess */
     display: flex;
+    flex-direction: column;
     align-items: center;
     margin-top:5%;
+    
     justify-content: center;
+    
 }
 
 /* Circular ProgressBar Shrinking for Responsiveness */
 .circularone {
     width: 100%; /* Scales dynamically */
-    max-width: 150px; /* Adjust max size */
+    max-width: 200px; /* Adjust max size */
 }
 
 /* Gauge Label */
@@ -116,3 +119,19 @@
     border-radius: 10px;
     border: 1px solid #ccc;
 }
+
+
+.circulartwo {
+    width: 100%; /* Scales dynamically */
+    max-width: 150px; /* Adjust max size */
+}
+
+.h-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+
+

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { FiUploadCloud, FiCamera } from "react-icons/fi";
 
-const ImageUploader = ({ onImageUpload }) => {
+const ImageUploader = ({ onImageUpload,buttonname }) => {
   const [image, setImage] = useState(null);
   const [cropType, setCropType] = useState("");
   const fileInputRef = useRef(null);
@@ -87,7 +87,7 @@ const ImageUploader = ({ onImageUpload }) => {
 
   return (
     <>
-      <h4 className="inputheading">Upload an Image for Pesticide Detection</h4>
+
 
       {/* Drag & Drop Box */}
       <div
@@ -141,14 +141,14 @@ const ImageUploader = ({ onImageUpload }) => {
           <img
             src={image}
             alt="Uploaded Preview"
-            className="w-32 h-32 object-cover rounded-lg border border-gray-600"
+            
           />
         </div>
       )}
 
       {/* Detect Pesticide Button */}
       <button className="detect-button" disabled={!image} onClick={handleDetectPesticide}>
-        Detect Pesticide
+        {buttonname}
       </button>
 
       {/* Styles */}
