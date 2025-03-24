@@ -14,6 +14,7 @@ import FCLayout from './pages/FCLayout.jsx'
 import Pest from './pages/farmercorner/Pest.jsx'
 import Fertiliser from './pages/farmercorner/Fertiliser.jsx'
 import Tutorials from './pages/farmercorner/Tutorials.jsx'
+import FCIndex from './pages/farmercorner/FCIndex.jsx'
 function App(props) {
  const loginb = true;
  
@@ -29,6 +30,7 @@ function App(props) {
     <Route path="profile" element={<Profile login={loginb}/>}/>
     <Route path="shop" element={<Shop login={loginb}/>}/>
         <Route path="/farmercorner" element={<FCLayout login={loginb}/>}>
+          <Route index element = {<FCIndex login = {loginb}/>}/>
           <Route path="pest-disease-detection" element={<Pest login={loginb}/>}/>
           <Route path="fertilizer-recommendation" element={<Fertiliser login={loginb}/>}/>
           

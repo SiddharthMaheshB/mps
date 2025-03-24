@@ -1,69 +1,136 @@
-
+/* General Container */
 .container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+    flex-grow: 1;
+    background-color: #f4f4f4;
+    padding-bottom: 20px;
 }
 
+/* Header */
 .header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    background-color: #00f0f0;
+    width: 80%;
     padding: 15px 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.search-bar {
-    padding: 10px;
-    width: 300px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
+.header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    margin: 0;
 }
 
+/* Search Bar */
+.search-bar {
+    width: 300px;
+    height: 40px;
+    padding: 5px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Categories */
 .categories {
-    display: flex;
-    gap: 15px;
     margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;  /* Allows categories to wrap */
+    justify-content: center;
+    width: 80%;
+    gap: 15px;
 }
 
 .category {
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    background-color: aquamarine;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .category:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background-color: #5fffc6;
 }
 
+/* Video Container (Flexbox for Responsive Cards) */
+.video-container {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    gap: 20px;
+    height: max-content;
+    margin-top: 20px;
+    margin-left: 0px;
+    overflow: visible;
+}
+
+/* Tutorial Cards */
 .tutorial-content {
-    margin-top: 30px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
+    flex: 1 1 calc(33.33% - 20px);
+    max-width: 300px;
+    min-width: 250px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.tutorial-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Tutorial Title */
 .tutorial-title {
-    font-size: 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
     margin-bottom: 10px;
 }
 
+/* Tutorial Video */
 .tutorial-video {
     width: 100%;
-    border-radius: 15px;
-    overflow: hidden;
+    height: 180px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
+/* Tutorial Description */
+.tutorial-content p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+    text-align: left;
+    line-height: 1.5;
+}
+
+/* Footer */
 .footer {
-    text-align: center;
-    margin-top: 30px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
+    margin-top: 40px;
+    font-size: 14px;
+    color: #666;
 }
