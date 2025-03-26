@@ -21,7 +21,7 @@ const farmBoundaries = [
 
 const FarmMap = () => {
   return (
-    <MapContainer center={center} zoom={15} style={{ height: "500px", width: "100%", borderRadius:"10px" , boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.3);" }}>
+    <MapContainer center={center} zoom={17} style={{ height: "500px", width: "100%", borderRadius:"10px" , boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.3)" ,zIndex:"0"}}>
       {/* 🌍 Satellite view from Esri */}
       <TileLayer
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"

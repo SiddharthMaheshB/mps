@@ -15,9 +15,14 @@ import Pest from './pages/farmercorner/Pest.jsx'
 import Fertiliser from './pages/farmercorner/Fertiliser.jsx'
 import Tutorials from './pages/farmercorner/Tutorials.jsx'
 import FCIndex from './pages/farmercorner/FCIndex.jsx'
+import img from "./frontimages/onlyplant.jpg"
 function App(props) {
  const loginb = true;
- 
+ const user = {
+  name: "John Doe",
+  avatar: img, // Replace with an actual image URL
+  role: "Farmer", // Can be "Farmer" or any other role
+};
   return (
     <BrowserRouter>
     <Routes>
@@ -27,7 +32,7 @@ function App(props) {
     <Route path = "box" element  = {<Box2/>}/>
     <Route path = "*" element = {<Notfound/>}/>
     <Route path = "social" element = {<FarmScene  login={loginb}/>}/>
-    <Route path="profile" element={<Profile login={loginb}/>}/>
+    <Route path="profile" element={<Profile login={loginb} user = {user}/>}/>
     <Route path="shop" element={<Shop login={loginb}/>}/>
         <Route path="/farmercorner" element={<FCLayout login={loginb}/>}>
           <Route index element = {<FCIndex login = {loginb}/>}/>

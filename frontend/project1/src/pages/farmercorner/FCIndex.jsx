@@ -5,9 +5,19 @@ import React from "react";
 import { Line } from "react-chartjs-2";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
- 
+import { FaTint } from "react-icons/fa";
+
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+
+
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+
+
 
 export default function FCIndex({login}){
+  const aerationData = [70, 75, 80, 78, 76];
     if(!login){
         return(
             <>
@@ -16,29 +26,40 @@ export default function FCIndex({login}){
         )
     }
     return(
-        <>
-        <div className="MapContainer">
+        <div>
+        <div className="dashboard-container">
+        <div className="map-container">
         <FarmMap/>
-        <TemperatureCard value={30}/>
+        </div>
+        <div className="metrics-container">
+        <TemperatureCard  className="Temperature" value={30}/>
+        <PHCard value={8}/>
+        <IrrigationCard status={"off"}/>
         
         </div>
-        </>
+        </div>
+        <div className="graph-container">
+         <MoistureCard data={moistureData}/>
+         <AerationCard data={aerationData}/>
+         </div>
+         </div>
     )
 }
 
 const moistureData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-    datasets: [
-      {
-        label: 'Moisture (%)',
-        data: [35, 40, 38, 42, 41],
-        borderColor: '#3498db',
-        backgroundColor: 'rgba(52, 152, 219, 0.2)',
-        fill: true,
-      },
-    ],
-  };
-  
+  labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+  datasets: [
+    {
+      label: "Moisture (%)",
+      data: [35, 40, 38, 42, 41],
+      borderColor: "#3498db",
+      backgroundColor: "rgba(52, 152, 219, 0.2)",
+      tension: 0.4, // Smooth curve
+      fill: true,
+    },
+  ],
+};
+
   // Sample aeration data for the line graph
   const aerationData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
@@ -56,12 +77,13 @@ const moistureData = {
 
 const TemperatureCard = ({ value }) => {
   return (
-    <div className="absolute top-4 right-4 p-4 bg-white shadow-lg rounded-lg">
-      <h3 className="text-lg font-bold">Temperature</h3>
+    <div className="card">
+      <h3 className="text-lg font-bold" style={{ marginTop:"1%"}}>Temperature</h3>
       <CircularProgressbar
+        className="circularone"
         value={value}
         text={`${value}°C`}
-        styles={buildStyles({ textColor: "black", pathColor: "red" })}
+        styles={buildStyles({ textColor: "black", pathColor: "red"})}
       />
     </div>
   );
@@ -69,54 +91,73 @@ const TemperatureCard = ({ value }) => {
 
 
 const MoistureCard = ({ data }) => {
-    return (
-      <div className="p-4 w-56 text-center shadow-lg bg-white rounded-2xl absolute top-4 left-4">
-        <h3 className="text-lg font-bold mb-2">💧 Moisture Level</h3>
+  return (
+    <div className="moisture-card">
+      <h3 className="card-title">💧 Moisture Level</h3>
+      <div className="chart-container">
         <Line data={data} options={{ responsive: true, maintainAspectRatio: false }} />
+      </div>
+    </div>
+  );
+};
+
+
+  
+
+  const PHCard = ({ value }) => {
+    const getColor = (pH) => {
+      if (pH < 7) return "red"; 
+      if (pH > 7) return "blue"; 
+      return "green"; 
+    };
+  
+    return (
+      <div className="card">
+        <h3 className="text-lg font-bold" style={{ marginTop: "1%" }}>pH Level</h3>
+        <CircularProgressbar
+          value={(value / 14) * 100} 
+          text={`${value}`}
+          styles={buildStyles({ textColor: "black", pathColor: getColor(value) })}
+        />
       </div>
     );
   };
+
+
+  const AerationCard = ({ data }) => {
+   
+    const chartData = {
+      labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+      datasets: [
+        {
+          label: "Aeration Level (%)",
+          data: data,
+          borderColor: "purple",
+          backgroundColor: "rgba(128, 0, 128, 0.2)",
+          fill: true,
+          tension: 0.4, 
+        },
+      ],
+    };
   
-
-const PHCard = ({ value }) => {
-  return (
-    <div className="absolute bottom-4 right-4 p-4 bg-white shadow-lg rounded-lg">
-      <h3 className="text-lg font-bold">pH Level</h3>
-      <CircularProgressbar
-        value={value}
-        text={`${value}`}
-        styles={buildStyles({ textColor: "black", pathColor: "green" })}
-      />
-    </div>
-  );
-};
-
-const AerationCard = ({ data }) => {
-  const chartData = {
-    labels: data.map((_, index) => index + 1),
-    datasets: [
-      {
-        label: "Aeration Level",
-        data,
-        borderColor: "purple",
-        backgroundColor: "rgba(128, 0, 128, 0.2)",
-      },
-    ],
+    return (
+      <div className="aeration-card">
+        <h3 className="card-title">🌬️ Aeration Level</h3>
+        <div className="chart-container">
+          <Line data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
+        </div>
+      </div>
+    );
   };
-
-  return (
-    <div className="absolute bottom-4 left-4 p-4 bg-white shadow-lg rounded-lg">
-      <h3 className="text-lg font-bold">Aeration</h3>
-      <Line data={chartData} />
-    </div>
-  );
-};
 
 const IrrigationCard = ({ status }) => {
   return (
-    <div className="absolute top-1/2 right-4 p-4 bg-white shadow-lg rounded-lg">
-      <h3 className="text-lg font-bold">Irrigation Status</h3>
-      <div className={`p-2 text-white ${status === "On" ? "bg-green-500" : "bg-red-500"}`}>{status}</div>
+    <div className="card"  style={{width:"80%", height:"20%"}}>
+      <h3 className="card-title">Irrigation Status</h3>
+      <div className={`status ${status === "On" ? "on" : "off"}`}>
+        {status === "On" && <FaTint className="water-icon" />}
+        {status}
+      </div>
     </div>
   );
 };
