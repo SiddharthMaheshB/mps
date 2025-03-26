@@ -1,11 +1,31 @@
 import { useState } from "react"
 import BackVideo from "./BackVideo"
-import vid1 from "../videos/2.mp4"
+import Myfarm from "../frontimages/myfarm2.jpeg"
+import vid1 from "../videos/1.mp4"
 import Logo from "./Logo"
+import Veggif from "../videos/veg.gif"
 import "./styles.css"
-const Login = ()=>{
+const Login = ({login})=>{
+    if(login){
+        return(
+            <>
+            <p>404Not found!!</p>
+            </>
+        )
+    }
     const [Username,setUsername] = useState("");
     const [Password,setPassword] = useState("");
+     const myStyle = {
+          padding:0,
+          top:0,
+          left:0,
+          backgroundImage : `url(${Myfarm})`,
+          height: "100vh",
+          width: "100%",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          boxSizing: "border-box",
+        }
     const handleSubmit = (eve)=>{
         eve.preventDefault();
         alert(`The username is: ${Username}`);
@@ -13,15 +33,15 @@ const Login = ()=>{
     } 
 
     return (
-        <div>
+        <div style={myStyle}>
             <div className="logo-container">
                 <a  href="/" aria-label="Home">
                 <Logo/>
                 </a>
             </div>
-            <BackVideo imgUrl={vid1} child={(
-                <> 
-                <h1 >Sign In</h1>
+           
+                <div className="content" > 
+                <img src={Veggif} alt="sign in" className="sign-ingif"/>
                 <form onSubmit={handleSubmit}>
                     
                     <label>Username:
@@ -50,8 +70,8 @@ const Login = ()=>{
                     <p>don't have an account?<a href="/register">Sign up</a></p>
                     
                 </div>
-                </>
-            )}/>
+                </div>
+            
 
             
         </div>

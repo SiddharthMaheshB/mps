@@ -1,30 +1,51 @@
 import { useState } from "react";
 import BackVideo from "./BackVideo";
-import vid1 from "../videos/3.mp4";
+import Onlyplant from "../frontimages/rural.png"
+import vid1 from "../videos/giphy.gif";
 import Logo from "./Logo";
 import "./styles.css";
 
-const Register = () => {
+const Register = ({login}) => {
+    if(login){
+        return(
+            <>
+            <p>404 Not Found !!</p>
+            </>
+        )
+    }
     const [username, setUsername] = useState("");
     const [mobile, setMobile] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+      const myStyle = {
+            position:"fixed",
+              padding:0,
+              top:0,
+              left:0,
+              backgroundImage : `url(${Onlyplant})`,
+              height: "100vh",
+              width: "100%",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              
+              boxSizing: "border-box",
+              zIndex: -1,
+            }
     const handleSubmit = (eve) => {
         eve.preventDefault();
         alert(`Registered with Username: ${username}, Mobile: ${mobile}, Email: ${email}`);
     };
 
     return (
-        <div>
+        <div style={myStyle} >
             <div className="logo-container">
                 <a href="/" aria-label="Home">
                     <Logo />
                 </a>
             </div>
-            <BackVideo imgUrl={vid1} child={(
-                <>
-                    <h1>Register</h1>
+            
+                <div className="content" style={{paddingTop:"10vh"}}>
+                    <img src={vid1} alt="sign in" className="sign-ingif"/>
                     <form onSubmit={handleSubmit}>
                         <label>Username:
                             <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
@@ -52,8 +73,8 @@ const Register = () => {
                     <div>
                         <p>Already have an account? <a href="/login">Login</a></p>
                     </div>
-                </>
-            )} />
+                </div>
+           
         </div>
     );
 };

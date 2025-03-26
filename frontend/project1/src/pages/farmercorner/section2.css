@@ -1,0 +1,137 @@
+.section2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    flex-grow: 1.05;
+    width:32%;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.confidence-bar {
+    width: 100%;
+    height: 10px;
+    background: #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .confidence-fill {
+    height: 100%;
+    border-radius: 5px;
+    width: 0; /* Start at 0 and update dynamically */
+    transition: width 1s ease-in-out;
+  }
+ 
+/* General container for Analysis */
+.analysis-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+   
+    box-sizing: border-box;
+}
+
+/* Circular Gauge Container */
+.g-container {
+    width: 80%; /* Make it responsive */
+    max-width: 40vw; /* Prevents it from being too large */
+     /* Ensures half-circle shape */
+    overflow: hidden; /* Clip excess */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top:5%;
+    
+    justify-content: center;
+    
+}
+
+/* Circular ProgressBar Shrinking for Responsiveness */
+.circularone {
+    width: 100%; /* Scales dynamically */
+    max-width: 200px; /* Adjust max size */
+}
+
+/* Gauge Label */
+.g-label {
+    position: absolute;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+   
+    padding: 0.2rem 0.4rem;
+    border-radius: 5px;
+}
+
+/* Details & Confidence Bar */
+.detail-container {
+    width: 90%;
+    margin-left: 5%;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Confidence Bar */
+.confidence-bar {
+    width: 90%;
+   
+    height: 8px;
+    background: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+    margin-left: 5%; 
+    position: relative;
+}
+
+/* Confidence Fill */
+.confidence-fill {
+    height: 100%;
+    transition: width 0.8s ease-in-out;
+}
+
+/* Image Preview */
+
+.image-preview {
+    width: 90%;
+    max-height: 150px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-left:5%;
+}
+
+/* Prevent Image Overflow */
+.preview-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+
+.circulartwo {
+    width: 100%; /* Scales dynamically */
+    max-width: 150px; /* Adjust max size */
+}
+
+.h-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+
+
