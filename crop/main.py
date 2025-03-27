@@ -3,10 +3,11 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import to_categorical
+import os
 
 class CropRecommendationLSTM:
     def __init__(self, data_path):
@@ -27,6 +28,10 @@ class CropRecommendationLSTM:
         
         # Initialize model attribute
         self.model = None
+        
+        # Create models directory if it doesn't exist
+        self.models_dir = 'saved_models'
+        os.makedirs(self.models_dir, exist_ok=True)
         
     def prepare_lstm_data(self, time_steps=3):
         # Reshape data for LSTM (samples, time steps, features)
@@ -68,7 +73,7 @@ class CropRecommendationLSTM:
         
         return model
     
-    def train_model(self, epochs=50, batch_size=32):
+    def train_model(self, epochs=50, batch_size=32, model_name='crop_recommendation_model.h5'):
         # Prepare LSTM data
         X_lstm, y_lstm = self.prepare_lstm_data()
         
@@ -103,12 +108,54 @@ class CropRecommendationLSTM:
         test_loss, test_accuracy = self.model.evaluate(X_test, y_test)
         print(f"Test Accuracy: {test_accuracy*100:.2f}%")
         
+        # Save the model
+        model_path = os.path.join(self.models_dir, model_name)
+        self.save_model(model_path)
+        
         return self.model, history
     
+    def save_model(self, model_path):
+        """
+        Save the trained model, scaler, and label encoder
+        """
+        # Save Keras model
+        self.model.save(model_path)
+        
+        # Save scaler and label encoder
+        import joblib
+        joblib.dump(self.scaler, os.path.join(self.models_dir, 'scaler.pkl'))
+        joblib.dump(self.label_encoder, os.path.join(self.models_dir, 'label_encoder.pkl'))
+    
+    def load_model(self, model_name='crop_recommendation_model.h5'):
+        """
+        Load a pre-trained model, scaler, and label encoder
+        """
+        import joblib
+        
+        # Construct full paths
+        model_path = os.path.join(self.models_dir, model_name)
+        scaler_path = os.path.join(self.models_dir, 'scaler.pkl')
+        encoder_path = os.path.join(self.models_dir, 'label_encoder.pkl')
+        
+        # Check if files exist
+        if not (os.path.exists(model_path) and 
+                os.path.exists(scaler_path) and 
+                os.path.exists(encoder_path)):
+            raise FileNotFoundError("Saved model, scaler, or label encoder not found.")
+        
+        # Load model
+        self.model = load_model(model_path)
+        
+        # Load scaler and label encoder
+        self.scaler = joblib.load(scaler_path)
+        self.label_encoder = joblib.load(encoder_path)
+        
+        return self.model
+    
     def predict_crop(self, new_data):
-        # Check if model is trained
+        # Check if model is loaded
         if self.model is None:
-            raise ValueError("Model has not been trained. Call train_model() first.")
+            raise ValueError("Model has not been loaded. Call load_model() first.")
         
         # Preprocess new data
         new_data_scaled = self.scaler.transform(new_data)
@@ -124,13 +171,23 @@ class CropRecommendationLSTM:
         
         return self.label_encoder.inverse_transform([predicted_class])[0]
 
-# Usage
+# Usage examples
 if __name__ == "__main__":
-    # Initialize and train the model
+    # Scenario 1: Train and save a new model
+    # crop_recommender = CropRecommendationLSTM('crop_data.csv')
+    # model, history = crop_recommender.train_model()
+    # 
+    # # Example prediction after training
+    # new_sample = np.array([[80, 40, 60, 26, 50, 6.5, 100]])  # Example input
+    # recommended_crop = crop_recommender.predict_crop(new_sample)
+    # print(f"Recommended Crop: {recommended_crop}")
+
+    # Scenario 2: Load a pre-trained model
+    print("\nLoading pre-trained model...")
     crop_recommender = CropRecommendationLSTM('crop_data.csv')
-    model, history = crop_recommender.train_model()
+    model = crop_recommender.load_model()
     
-    # Example prediction
-    new_sample = np.array([[80, 40, 60, 26, 50, 6.5, 100]])  # Example input
-    recommended_crop = crop_recommender.predict_crop(new_sample)
-    print(f"Recommended Crop: {recommended_crop}")
+    # Predict using the loaded model
+    new_sample_2 = np.array([[75, 45, 55, 28, 55, 6.3, 90]])  # Another example input
+    recommended_crop_2 = crop_recommender.predict_crop(new_sample_2)
+    print(f"Recommended Crop: {recommended_crop_2}")
