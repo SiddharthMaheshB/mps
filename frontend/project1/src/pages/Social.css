@@ -1,0 +1,67 @@
+.social-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .stories-container {
+    width: 60%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+  }
+  
+  .stories {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .story-card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    min-width: 100px;
+    text-align: center;
+  }
+  
+  .feed-container {
+    width: 60%;
+    margin-top: 20px;
+  }
+  
+  .post-input {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .post-card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+  

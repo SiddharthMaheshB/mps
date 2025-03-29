@@ -61,8 +61,8 @@ const words = text.split(" ");
   const links = [
     "/farmercorner/pest-disease-detection",
     "/farmercorner/fertilizer-recommendation",
-    "/farmercorner/smart-irrigation",
-     "/farmercorner/crop-revenue-prediction",
+    "/farmercorner",
+     "/farmercorner/crop-recommendation",
      "/farmercorner/organic-farming-tutorials"
   ]
   if(props.login)return(
