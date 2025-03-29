@@ -29,6 +29,7 @@
     "react-leaflet-draw": "^0.20.6",
     "react-tabs": "^6.1.0",
     "recharts": "^2.15.1",
+    "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.15",
     "three": "^0.173.0"
   },

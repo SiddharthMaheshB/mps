@@ -15,6 +15,7 @@ import Pest from './pages/farmercorner/Pest.jsx'
 import Fertiliser from './pages/farmercorner/Fertiliser.jsx'
 import Tutorials from './pages/farmercorner/Tutorials.jsx'
 import FCIndex from './pages/farmercorner/FCIndex.jsx'
+import CropRecommendation from './pages/farmercorner/CropRecommendation.jsx'
 import img from "./frontimages/onlyplant.jpg"
 function App(props) {
  const loginb = true;
@@ -22,6 +23,8 @@ function App(props) {
   name: "John Doe",
   avatar: img, // Replace with an actual image URL
   role: "Farmer", // Can be "Farmer" or any other role
+  mobile:"1234567890",
+  email:"johndoe@gmail.com"
 };
   return (
     <BrowserRouter>
@@ -40,6 +43,7 @@ function App(props) {
           <Route path="fertilizer-recommendation" element={<Fertiliser login={loginb}/>}/>
           
           <Route path="organic-farming-tutorials" element={<Tutorials login={loginb}/>}/>
+          <Route path = "crop-recommendation" element={<CropRecommendation login={loginb} />}/>
         </Route>
     </Route>
     <Route path = "login" element = {<Login login={loginb}/>}/>
