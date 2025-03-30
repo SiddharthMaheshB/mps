@@ -1,103 +1,54 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import io from "socket.io-client";
+import { Outlet, Link } from "react-router-dom";
+import { useState } from "react";
 import "./Social.css";
+import NotificationBell from "./Social/Notification";
 
-const socket = io("http://localhost:5000"); // Update with your backend URL
+export default function SocialLayout() {
+    // Centralized state for notifications
+    const [newSharedPosts, setNewSharedPosts] = useState([
+        {
+            id: 101,
+            username: "AgriExpert",
+            userImage: "/user1.jpg",
+            image: "/farm1.jpg",
+            caption: "Got this shared by a friend! 🌾",
+            likes: 12,
+        },
+    ]);
 
-export default function FarmScene({ login }) {
-  const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState("");
-  const [stories, setStories] = useState([]);
-  const [newStory, setNewStory] = useState("");
-
-  if (!login) {
-    return <h1>404 Not Found</h1>;
-  }
-
-  useEffect(() => {
-    // Listen for real-time post updates
-    socket.on("newPost", (post) => {
-      setPosts((prevPosts) => [post, ...prevPosts]);
-    });
-
-    // Listen for real-time story updates
-    socket.on("newStory", (story) => {
-      setStories((prevStories) => [story, ...prevStories]);
-    });
-
-    return () => {
-      socket.off("newPost");
-      socket.off("newStory");
+    // Function to clear notifications when viewing shared posts
+    const clearNotifications = () => {
+        setNewSharedPosts([]); // Reset notifications
     };
-  }, []);
 
-  const handlePostSubmit = () => {
-    if (newPost.trim() !== "") {
-      const post = {
-        id: Date.now(),
-        content: newPost,
-        author: "John Doe", // Replace with actual user data
-        time: new Date().toLocaleTimeString(),
-      };
-      socket.emit("createPost", post);
-      setNewPost("");
-    }
-  };
+    return (
+        <div className="social-layout">
+            {/* Navbar */}
+            <nav className="social-navbar">
+                <h1>FarmConnect</h1>
+                <div className="nav-links">
+                    <Link to="/social">Feed</Link>
+                    <Link to="/social/shared">Shared</Link>
+                    <Link to="/social/profile">Profile</Link>
+                    
+                </div>
+            </nav>
 
-  const handleStorySubmit = () => {
-    if (newStory.trim() !== "") {
-      const story = {
-        id: Date.now(),
-        content: newStory,
-        author: "John Doe", // Replace with actual user data
-      };
-      socket.emit("createStory", story);
-      setNewStory("");
-    }
-  };
+            {/* Main Content */}
+            <div className="social-content">
+                {/* Sidebar */}
+                <aside className="social-sidebar">
+                    <h3>Trending</h3>
+                    <p>#OrganicFarming</p>
+                    <p>#SmartIrrigation</p>
+                    <p>#AgriTech</p>
+                </aside>
 
-  return (
-    <div className="social-page">
-      {/* Stories Section */}
-      <div className="stories-container">
-        <input
-          type="text"
-          placeholder="Share a short story..."
-          value={newStory}
-          onChange={(e) => setNewStory(e.target.value)}
-        />
-        <button onClick={handleStorySubmit}>Post Story</button>
-        <div className="stories">
-          {stories.map((story) => (
-            <motion.div key={story.id} className="story-card">
-              <p>{story.content}</p>
-              <span>- {story.author}</span>
-            </motion.div>
-          ))}
+                {/* Page Content */}
+                <main className="social-main">
+                    <Outlet context={{ newSharedPosts, clearNotifications }} />
+                </main>
+            </div>
         </div>
-      </div>
-
-      {/* News Feed Section */}
-      <div className="feed-container">
-        <div className="post-input">
-          <textarea
-            placeholder="What's on your mind?"
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-          />
-          <button onClick={handlePostSubmit}>Post</button>
-        </div>
-
-        {/* Posts */}
-        {posts.map((post) => (
-          <motion.div key={post.id} className="post-card">
-            <h3>{post.author}</h3>
-            <p>{post.content}</p>
-            <span>{post.time}</span>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
+    );
 }

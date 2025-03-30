@@ -1,0 +1,18 @@
+.shared-posts-page {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    color: white;
+}
+
+.shared-posts-page h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.shared-posts-page p {
+    text-align: center;
+    font-size: 16px;
+    color: #ccc;
+}

@@ -1,67 +1,57 @@
-.social-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .stories-container {
-    width: 60%;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    padding: 10px;
-    border-radius: 15px;
-    text-align: center;
-  }
-  
-  .stories {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 10px;
-  }
-  
-  .story-card {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 10px;
-    border-radius: 10px;
-    min-width: 100px;
-    text-align: center;
-  }
-  
-  .feed-container {
-    width: 60%;
-    margin-top: 20px;
-  }
-  
-  .post-input {
-    display: flex;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px;
-    border-radius: 10px;
-  }
-  
-  textarea {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-  }
-  
-  button {
-    padding: 5px 10px;
-    background: green;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .post-card {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 10px;
-  }
-  
+.social-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 70px; 
+}
+
+/* Navbar Styling */
+.social-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #004d00, #006600);
+  color: white;
+  padding: 15px 20px;
+}
+
+.social-navbar h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+  opacity: 0.8;
+}
+
+/* Content Wrapper */
+.social-content {
+  display: flex;
+  flex-grow: 1;
+}
+
+/* Sidebar */
+.social-sidebar {
+  width: 20%;
+  padding: 15px;
+  background: #f4f4f4;
+  border-right: 2px solid #ddd;
+}
+
+/* Main Content */
+.social-main {
+  flex-grow: 1;
+  padding: 20px;
+}
