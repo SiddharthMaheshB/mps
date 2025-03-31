@@ -3,8 +3,11 @@ import { useState } from "react";
 import "./Social.css";
 import NotificationBell from "./Social/Notification";
 
-export default function SocialLayout() {
+export default function SocialLayout({login}) {
     // Centralized state for notifications
+    if(!login){
+        return (<>404 Not found!!</>);
+    }
     const [newSharedPosts, setNewSharedPosts] = useState([
         {
             id: 101,

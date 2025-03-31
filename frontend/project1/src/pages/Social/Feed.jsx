@@ -33,7 +33,11 @@ const getFriends = () => [
     { id: 3, name: "EcoGrower" },
 ];
 
-export default function FarmScene() {
+export default function FarmScene({login}) {
+
+    if(!login){
+        return (<>404 NOt found</>)
+    }
     const [posts, setPosts] = useState([]);
     const [friends, setFriends] = useState([]);
     const [sharedPosts, setSharedPosts] = useState([]); // Store shared posts
@@ -54,6 +58,8 @@ export default function FarmScene() {
             setSharedPosts([...sharedPosts, { ...postToShare, sharedWith: sharedFriends }]);
         }
     };
+
+   
 
     return (
         <div className="social-feed">

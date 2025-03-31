@@ -15,7 +15,7 @@
     color: white;
 }
 
-.logo {
+.ecom-logo {
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -31,7 +31,7 @@
     text-align: left;
 }
 
-.icons {
+.ecom-icons {
     display: flex;
     gap: 15px;
 }
@@ -47,13 +47,13 @@
     transform: scale(1.1);
 }
 
-.content {
+.ecom-content {
     flex-grow: 1;
     padding: 10px;
-    padding-top: 0px;
+    padding-top: 2%;
     width:80vw;
     box-shadow: none;
     color:#333;
     backdrop-filter: none;
-    
+   
 }

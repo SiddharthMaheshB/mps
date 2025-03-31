@@ -7,6 +7,7 @@ const products = {
   vegetables: [
     { id: 1, name: 'Fresh Carrots', price: 3, image: '4.jpg' },
     { id: 2, name: 'Tomatoes', price: 4, image: '3.jpg' },
+   
   ],
   fruits: [
     { id: 3, name: 'Organic Apples', price: 5, image: '3.jpg' },
@@ -25,7 +26,7 @@ export default function Shop({ login }) {
 
   return (
     <div className="shop-container">
-      <h2>Farm Products</h2>
+      <h1 style={{textAlign:"center",marginLeft:"20%"}}>Farm Products</h1>
 
       {/* Vegetables Section */}
       <h3 className="category-title">Vegetables</h3>
@@ -62,7 +63,7 @@ const ProductCard = ({ product }) => {
       <div className="product-card">
 
         <img src={product.image} alt={product.name} className="product-image" />
-        <Link to={`/shop/${product.id}`} className="view-details"><h3 style={{ margin:"8px", marginBottom:"0px"}}>{product.name}</h3></Link>
+        <Link to={`/shop/${product.id}`} className="view-details" style={{textDecoration:"none"}}><h3 style={{ margin:"8px", marginBottom:"0px"}}>{product.name}</h3></Link>
         <p>Price: ₹{product.price} per kg</p>
         
         {/* Quantity Selection */}

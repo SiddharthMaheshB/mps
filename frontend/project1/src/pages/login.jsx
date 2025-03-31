@@ -40,7 +40,7 @@ const Login = ({login})=>{
                 </a>
             </div>
            
-                <div className="content" > 
+                <div className="login-content" > 
                 <img src={Veggif} alt="sign in" className="sign-ingif"/>
                 <form onSubmit={handleSubmit}>
                     
@@ -59,8 +59,8 @@ const Login = ({login})=>{
                     <a href="/">Forgot password?</a>
                     </div>
                     <br/>
-                    <div className="button-container">
-                    <input type="submit" value ="Sign in" id="submit"/> 
+                    <div className="login-button-container">
+                    <input type="submit" value ="Sign in" className="login-submit"/> 
                     <button type="button" class="login-with-google-btn" >
                         Sign in with Google
                     </button>

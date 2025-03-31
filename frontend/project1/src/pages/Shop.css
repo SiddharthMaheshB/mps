@@ -8,6 +8,8 @@
     font-size: 1.5rem;
     border-bottom: 2px solid #ddd;
     padding-bottom: 5px;
+    text-align: center;
+    margin-left: 20%;
 }
 
 .product-card{
@@ -15,11 +17,18 @@
     flex-direction: column;
     border: 1px solid #ddd;
     padding: 10px;
+    margin-bottom: 30px;
     border-radius: 8px;
     align-items: center;
-    width:30%;
+    width:25%;
     background: white;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     transition: transform 0.2s;
+
+}
+
+.product-card:hover{
+    transform: scale(1.03)
 }
 
 .product-image{
@@ -42,5 +51,26 @@
 .product-grid{
     display: flex;
     flex-flow: wrap;
+    flex-wrap: wrap;
     gap:20px;
+    margin-left: 20%;
+}
+
+.quantity-select {
+    width: 100px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    text-align: center;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Ensuring label and select are in one line */
+.input-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between label and select */
+    margin-top: 5px;
 }

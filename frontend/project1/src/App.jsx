@@ -23,7 +23,7 @@ import ProductDetail from './pages/ProductDetail.jsx'
 import EcommerceLayout from './pages/EcommerceLayout.jsx'
 import Cart from './pages/Cart.jsx'
 function App(props) {
- const loginb = true;
+ const loginb = false;
  const user = {
   name: "John Doe",
   avatar: img, // Replace with an actual image URL
@@ -42,17 +42,15 @@ function App(props) {
     <Route path = "box" element  = {<Box2/>}/>
     <Route path = "*" element = {<Notfound/>}/>
 
-    <Route path = "/social" element={<SocialLayout  />}>
+    <Route path = "/social" element={<SocialLayout login={loginb} />}>
       <Route index element = {<FarmScene  login={loginb}/>}/>
       <Route path="shared" element={<Shared  />}/>
       <Route path=":username" element={<Profile />} />
-
-
     </Route>
 
     <Route path="profile" element={<Profile login={loginb} user = {user}/>}/>
 
-    <Route path="shop" element={<EcommerceLayout />}>
+    <Route path="shop" element={<EcommerceLayout login={loginb} />}>
       <Route index element={<Shop login={loginb} />} />
       <Route path=":productId" element={<ProductDetail />} />
       <Route path="cart" element={<Cart />} />

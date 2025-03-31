@@ -14,6 +14,14 @@ function Navbar({ login, ToFooter, ToFeatures }) {
     console.log("User logged out!"); // Replace with actual logout logic
   };
 
+  const scrollTo= (ref)=>{
+    console.log("Hello world");
+      console.log(ref)
+      console.log(ref.current)
+      ref.current.scrollIntoView({behavior:"smooth"})
+      
+  }
+
   if (login)
     return (
       <>
@@ -96,6 +104,7 @@ const styles = {
     fontSize: "18px",
     margin: "0 10px",
     padding: "5px 10px",
+    textDecoration:"none",
     cursor: "pointer",
   },
   popupOverlay: {
