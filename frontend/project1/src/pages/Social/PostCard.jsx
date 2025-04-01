@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Postcard.css";
 import { Link } from "react-router-dom";
+import { Heart, HeartOff, Share2, MessageCircle, Copy} from "lucide-react";
+import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
 const PostCard = ({ post, friends, onShare }) => {
     const [likes, setLikes] = useState(post.likes);
     const [liked, setLiked] = useState(false);
@@ -10,23 +12,19 @@ const PostCard = ({ post, friends, onShare }) => {
     const [comments, setComments] = useState(post.comments || []);
     const [selectedFriends, setSelectedFriends] = useState([]);
 
-    // Handle Like
     const handleLike = () => {
         setLikes(liked ? likes - 1 : likes + 1);
         setLiked(!liked);
     };
 
-    // Toggle Share Menu
     const handleShare = () => {
         setShowShare(!showShare);
     };
 
-    // Toggle Comments Section
     const toggleComments = () => {
         setShowComments(!showComments);
     };
 
-    // Handle Comment Submission
     const handleCommentSubmit = (e) => {
         e.preventDefault();
         if (newComment.trim()) {
@@ -35,7 +33,6 @@ const PostCard = ({ post, friends, onShare }) => {
         }
     };
 
-    // Handle Friend Selection for In-App Sharing
     const handleFriendSelection = (friend) => {
         setSelectedFriends((prev) =>
             prev.includes(friend)
@@ -44,14 +41,12 @@ const PostCard = ({ post, friends, onShare }) => {
         );
     };
 
-    // Handle Sharing the Post Within the App
     const sharePost = () => {
         onShare(post.id, selectedFriends);
         setShowShare(false);
-        setSelectedFriends([]); // Clear selection after sharing
+        setSelectedFriends([]);
     };
 
-    // Handle External Sharing
     const shareOnSocial = (platform) => {
         const postUrl = window.location.origin + "/post/" + post.id;
         if (platform === "whatsapp") {
@@ -70,25 +65,26 @@ const PostCard = ({ post, friends, onShare }) => {
         <div className="post-card">
             <div className="post-header">
                 <img src={post.userImage} alt="User" className="user-img" />
-                <span className="username"> <Link to={`/profile/${post.username}`}>{post.username}</Link></span>
+                <span className="username"> <Link to={`/social/profile/${post.username}`} style={{textDecoration:"none"}}>{post.username}</Link></span>
             </div>
 
             <img src={post.image} alt="Post" className="post-img" />
 
-            <div className="post-actions">
-                <button onClick={handleLike}>
-                    {liked ? "❤️" : "🤍"} {likes}
+            <div className="post-actions" style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', padding: '10px 0' }}>
+                <button onClick={handleLike} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    {liked ? <Heart color="red" /> : <HeartOff />} {likes}
                 </button>
-                <button onClick={handleShare}>🔗 Share</button>
-                <button onClick={toggleComments}>💬 {comments.length} Comments</button>
+                <button onClick={toggleComments} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <MessageCircle /> {comments.length} Comments
+                </button>
+                <button onClick={handleShare} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Share2 /> Share
+                </button>
             </div>
 
-            {/* Share Menu */}
             {showShare && (
                 <div className="share-options">
                     <h4>Share Post:</h4>
-
-                    {/* In-App Sharing */}
                     <div className="in-app-sharing">
                         <h5>Share with Friends:</h5>
                         {friends.map((friend) => (
@@ -101,21 +97,19 @@ const PostCard = ({ post, friends, onShare }) => {
                                 {friend.name}
                             </label>
                         ))}
-                        <button className="share-btn" onClick={sharePost}>Share in App</button>
+                        
                     </div>
 
-                    {/* External Sharing */}
                     <div className="external-sharing">
                         <h5>Share Externally:</h5>
-                        <button onClick={() => shareOnSocial("whatsapp")}>📲 WhatsApp</button>
-                        <button onClick={() => shareOnSocial("facebook")}>📘 Facebook</button>
-                        <button onClick={() => shareOnSocial("twitter")}>🐦 Twitter</button>
-                        <button onClick={() => shareOnSocial("copy")}>📋 Copy Link</button>
+                        <button onClick={() => shareOnSocial("whatsapp")} ><FaWhatsapp/> WhatsApp</button>
+                        <button onClick={() => shareOnSocial("facebook")}><FaFacebook /> Facebook</button>
+                        <button onClick={() => shareOnSocial("twitter")}><FaTwitter /> Twitter</button>
+                        <button onClick={() => shareOnSocial("copy")}><Copy size={15}/> Copy Link</button>
                     </div>
                 </div>
             )}
 
-            {/* Comments Section */}
             {showComments && (
                 <div className="comments-section">
                     <h4>Comments:</h4>
@@ -140,3 +134,4 @@ const PostCard = ({ post, friends, onShare }) => {
 };
 
 export default PostCard;
+

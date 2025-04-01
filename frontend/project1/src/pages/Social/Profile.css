@@ -1,81 +1,74 @@
-.profile-container {
-    max-width: 800px;
+.social-profile-container {
+    max-width: 600px;
     margin: auto;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    font-family: Arial, sans-serif;
 }
 
-.profile-header {
+.social-profile-header {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.profile-pic {
-    width: 100px;
-    height: 100px;
+.social-profile-pic {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #4CAF50;
 }
 
-.profile-info h2 {
+.social-profile-info h2 {
     margin: 0;
+    font-size: 22px;
+}
+
+.social-profile-info p {
+    margin: 3px 0;
+    color: #555;
 }
 
 .follow-btn, .unfollow-btn {
-    background-color: #4CAF50;
-    color: white;
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
 }
 
-.unfollow-btn {
-    background-color: #f44336;
-}
-
-.profile-tabs {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.profile-tabs button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
+.follow-btn {
+    background-color: #28a745;
     color: white;
 }
 
-.profile-tabs .active {
-    border-bottom: 2px solid #4CAF50;
+.unfollow-btn {
+    background-color: #dc3545;
+    color: white;
 }
 
-.profile-posts {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
+/* Posts Section */
+.Social-profile-posts {
     margin-top: 20px;
 }
 
-.post-card {
-    width: 150px;
-    padding: 10px;
-    background: white;
+.social-post-card {
+    border: 1px solid #ddd;
     border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
 }
 
-.post-card img {
+.social-post-card img {
     width: 100%;
-    border-radius: 10px;
+    height: auto;
+}
+
+.social-post-card p {
+    padding: 10px;
+    margin: 0;
+    background: #f8f9fa;
 }

@@ -2,7 +2,8 @@ import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
 import "./Social.css";
 import NotificationBell from "./Social/Notification";
-
+import { Newspaper, MessageCircle, User } from "lucide-react";
+import { FaHome, FaRocket, FaUser } from "react-icons/fa";
 export default function SocialLayout({login}) {
     // Centralized state for notifications
     if(!login){
@@ -30,9 +31,9 @@ export default function SocialLayout({login}) {
             <nav className="social-navbar">
                 <h1>FarmConnect</h1>
                 <div className="nav-links">
-                    <Link to="/social">Feed</Link>
-                    <Link to="/social/shared">Shared</Link>
-                    <Link to="/social/profile">Profile</Link>
+                    <Link to="/social"><FaHome size={24}/></Link>
+                    <Link to="/social/shared"><MessageCircle size={24} /></Link>
+                    <Link to="/social/profile/john_doe"><FaUser  size={24}/></Link>
                     
                 </div>
             </nav>
@@ -41,6 +42,12 @@ export default function SocialLayout({login}) {
             <div className="social-content">
                 {/* Sidebar */}
                 <aside className="social-sidebar">
+                
+                <Link to="/social/new-post" className="btn-green">
+    + Create Post
+</Link>
+
+                
                     <h3>Trending</h3>
                     <p>#OrganicFarming</p>
                     <p>#SmartIrrigation</p>

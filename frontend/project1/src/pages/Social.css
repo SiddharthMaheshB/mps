@@ -10,7 +10,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, #004d00, #006600);
+  background: linear-gradient(135deg, #607D8B, #CFD8DC);
+
   color: white;
   padding: 15px 20px;
 }
@@ -21,9 +22,12 @@
 }
 
 .nav-links {
+  margin-right:1%;
   display: flex;
   gap: 15px;
 }
+
+
 
 .nav-links a {
   color: white;
@@ -33,7 +37,8 @@
 }
 
 .nav-links a:hover {
-  opacity: 0.8;
+  
+  transform: scale(1.05);
 }
 
 /* Content Wrapper */
@@ -44,7 +49,7 @@
 
 /* Sidebar */
 .social-sidebar {
-  width: 20%;
+  width: 12%;
   padding: 15px;
   background: #f4f4f4;
   border-right: 2px solid #ddd;
@@ -54,4 +59,26 @@
 .social-main {
   flex-grow: 1;
   padding: 20px;
+}
+
+.btn-green {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #2E8B57; /* SeaGreen */
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-green:hover {
+  background-color: #228B22; /* ForestGreen */
+  transform: scale(1.05);
+}
+
+.btn-green:active {
+  transform: scale(0.98);
 }

@@ -22,8 +22,10 @@ import SocialLayout from "./pages/Social.jsx";
 import ProductDetail from './pages/ProductDetail.jsx'
 import EcommerceLayout from './pages/EcommerceLayout.jsx'
 import Cart from './pages/Cart.jsx'
+import SocialProfile from './pages/Social/Profile.jsx'
+import NewSocialPost from './pages/Social/NewPost.jsx'
 function App(props) {
- const loginb = false;
+ const loginb = true;
  const user = {
   name: "John Doe",
   avatar: img, // Replace with an actual image URL
@@ -45,7 +47,8 @@ function App(props) {
     <Route path = "/social" element={<SocialLayout login={loginb} />}>
       <Route index element = {<FarmScene  login={loginb}/>}/>
       <Route path="shared" element={<Shared  />}/>
-      <Route path=":username" element={<Profile />} />
+      <Route path="profile/:username" element={<SocialProfile />} />
+      <Route path='new-post'element={<NewSocialPost/>}/>
     </Route>
 
     <Route path="profile" element={<Profile login={loginb} user = {user}/>}/>
