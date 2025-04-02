@@ -1,0 +1,74 @@
+.social-profile-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.social-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.social-profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.social-profile-info h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.social-profile-info p {
+    margin: 3px 0;
+    color: #555;
+}
+
+.follow-btn, .unfollow-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.follow-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.unfollow-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Posts Section */
+.Social-profile-posts {
+    margin-top: 20px;
+}
+
+.social-post-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.social-post-card img {
+    width: 100%;
+    height: auto;
+}
+
+.social-post-card p {
+    padding: 10px;
+    margin: 0;
+    background: #f8f9fa;
+}

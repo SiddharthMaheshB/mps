@@ -44,7 +44,7 @@ const Register = ({login}) => {
                 </a>
             </div>
             
-                <div className="content" style={{paddingTop:"10vh"}}>
+                <div className="login-content" style={{paddingTop:"10vh"}}>
                     <img src={vid1} alt="sign in" className="sign-ingif"/>
                     <form onSubmit={handleSubmit}>
                         <label>Username:
@@ -63,8 +63,8 @@ const Register = ({login}) => {
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </label>
                         <br />
-                        <div className="button-container">
-                            <input type="submit" value="Register" id="submit" />
+                        <div className="login-button-container">
+                            <input type="submit" value="Register" className="login-submit" style={{padding:"30px",paddingTop:"20px",paddingLeft:"20px",paddingBottom:"20px"}} />
                             <button type="button" className="login-with-google-btn">
                                 Sign up with Google
                             </button>

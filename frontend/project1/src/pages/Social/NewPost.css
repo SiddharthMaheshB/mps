@@ -1,0 +1,73 @@
+.new-social-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8); /* Glassmorphism effect */
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.new-social-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2E8B57; /* SeaGreen */
+    margin-bottom: 15px;
+}
+
+.new-social-textarea {
+    width: 90%;
+    height: 120px;
+    padding: 10px;
+    border: 2px solid #228B22; /* ForestGreen */
+    border-radius: 8px;
+    font-size: 16px;
+    resize: none;
+    background: white;
+    outline: none;
+}
+
+.new-social-textarea::placeholder {
+    color: #666;
+}
+
+.new-social-file-input {
+    margin-top: 10px;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.new-social-image-preview {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 2px solid #2E8B57;
+}
+
+.new-social-submit {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: #2E8B57; /* SeaGreen */
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.new-social-submit:hover {
+    background-color: #228B22; /* ForestGreen */
+    transform: scale(1.05);
+}
+
+.new-social-submit:active {
+    transform: scale(0.98);
+}

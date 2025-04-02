@@ -1,0 +1,59 @@
+.ecommerce-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    height: 100vh;
+
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #333; /* Dark background */
+    color: white;
+}
+
+.ecom-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.search-bar {
+    flex: 1;
+    max-width: 400px;
+    padding: 8px;
+    padding-left: 20px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    text-align: left;
+}
+
+.ecom-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon {
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.icon:hover {
+    transform: scale(1.1);
+}
+
+.ecom-content {
+    flex-grow: 1;
+    padding: 10px;
+    padding-top: 2%;
+    width:80vw;
+    box-shadow: none;
+    color:#333;
+    backdrop-filter: none;
+   
+}
