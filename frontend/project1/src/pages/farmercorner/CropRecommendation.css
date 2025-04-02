@@ -1,0 +1,121 @@
+.crop-container {
+  display: flex;
+  width: 80vw; /* 80% of the viewport width */
+  height: 50vh; /* Half page height */
+  justify-content: space-between;
+  padding: 20px;
+  gap: 1%;
+  overflow: hidden;
+  box-sizing: border-box;
+  max-width: 80vw; /* Ensures it doesn't expand beyond 80% */
+  margin: 0 auto; /* Centers it on the page */
+}
+
+/* 🟢 Upload Section */
+.crop-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.file-upload {
+  border: 2px dashed #bbb;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+.manual-entry input {
+  display: block;
+  width: 80%;
+  padding: 8px;
+  margin: 5px auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.toggle-btn, .recommend-btn {
+  background: linear-gradient(45deg, #ff7e5f, #feb47b);
+  border: none;
+  padding: 10px;
+  width: 80%;
+  margin-top: 10px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.toggle-btn:hover, .recommend-btn:hover {
+  opacity: 0.8;
+}
+
+/* 🟢 Crop Suitability Gauge */
+.crop-analysis {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gauge {
+  width: 120px;
+}
+
+/* 🟢 Recommended Crops */
+.crop-recommendations {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.crop-list {
+  list-style: none;
+  padding: 0;
+}
+
+.crop-list li {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.crop-icon {
+  font-size: 20px;
+}
+
+.best-practices {
+  list-style: none;
+  padding: 0;
+}
+
+.best-practices li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+

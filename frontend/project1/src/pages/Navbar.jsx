@@ -18,7 +18,10 @@ function Navbar({ login, ToFooter, ToFeatures }) {
     return (
       <>
         <nav style={styles.navbar}>
-          <Logo style={styles.logo} />
+        <a  href="/" aria-label="Home"  style={{textDecoration:"none",color:"white"}}>
+        <Logo style={styles.logo} />
+          </a>
+          
           <div>
             <Link to="/social" style={styles.link}>Social</Link>
             <Link to="/shop" style={styles.link}>Shop</Link>
@@ -73,6 +76,8 @@ const styles = {
   logo: {
     fontSize: "24px",
     fontWeight: "bold",
+    
+
   },
   link: {
     color: "white",
