@@ -5,7 +5,7 @@ import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 
-const recommendations = {
+const reco = {
   musk: {
     remedy: "Neem oil spray is an effective and eco-friendly alternative for controlling musk pests.",
     dosage: "Mix 5ml of neem oil with 1 liter of water and spray on affected plants every 7 days.",
@@ -13,7 +13,7 @@ const recommendations = {
   // Add more pesticides here...
 };
 
-const detectionHistory = [
+const detec = [
   { date: "Jan", cases: 5 },
   { date: "Feb", cases: 9 },
   { date: "Mar", cases: 12 },
@@ -21,22 +21,22 @@ const detectionHistory = [
   { date: "May", cases: 15 },
 ];
 
-const seasonalTrends = [
+const seas = [
   { season: "Spring", cases: 10 },
   { season: "Summer", cases: 20 },
   { season: "Autumn", cases: 8 },
   { season: "Winter", cases: 5 },
 ];
 
-const pesticideDistribution = [
+const pestici = [
   { name: "Musk", value: 45 },
   { name: "Alpha", value: 25 },
   { name: "Beta", value: 30 },
 ];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
+const COL = ["#0088FE", "#00C49F", "#FFBB28"];
 
-const Recommendations = ({ detectedPesticide }) => {
+const Recommendations = ({ detectedPesticide, COLORS=COL, pesticideDistribution= pestici,seasonalTrends=seas,detectionHistory=detec,recommendations =reco}) => {
   const pesticideInfo = recommendations[detectedPesticide] || {
     remedy: "No specific remedy found.",
     dosage: "No dosage guidelines available.",

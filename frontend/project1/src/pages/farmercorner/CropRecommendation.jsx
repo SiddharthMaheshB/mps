@@ -1,5 +1,5 @@
 import "./common.css";
-import FileUploader from "./FileUploader";
+import FileUploader1 from "./FileUploader1";
 import CroprecResults from "./CroprecResults";
 import CropRec from "./Crop";
 import IExa from "/5.jpg";
@@ -52,7 +52,7 @@ export default function CropRecommendation({ login }) {
     <>
       <div className="section-container">
         <div className="section1">
-          <FileUploader />
+          <FileUploader1 />
         </div>
         <div className="section2">
           <CroprecResults {...data} />

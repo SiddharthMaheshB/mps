@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score
 import joblib
 
 # Load dataset
-df = pd.read_csv("soil_data.csv")
+df = pd.read_csv("data.csv")
 
 # Encode categorical features
 label_encoders = {}

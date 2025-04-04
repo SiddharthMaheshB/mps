@@ -78,13 +78,28 @@ const ImageUploader = ({ onImageUpload,buttonname }) => {
   };
 
   const handleDetectPesticide = () => {
+    if (!image || !cropType) {
+      alert("Please upload an image and select a crop type.");
+      return;
+    }
+  
+    const simulatedPayload = {
+      cropType,
+      imageData: image,
+      detectedAt: new Date().toISOString()
+    };
+  
+    console.log("🔬 Sending to pesticide detection API:", simulatedPayload);
+    alert("🧪 Detection in progress... (Simulated)\n\nCheck console for payload.");
+  
     setFadeOutImage(true);
     setTimeout(() => {
       setImage(null);
+      setCropType("");
       setFadeOutImage(false);
-    }, 500); // 500ms transition
+    }, 500);
   };
-
+  
   return (
     <>
 
@@ -152,12 +167,15 @@ const ImageUploader = ({ onImageUpload,buttonname }) => {
       </button>
 
       {/* Styles */}
-      <style jsx>{`
-        .fade-out {
-          opacity: 0;
-          transition: opacity 0.5s ease-in-out;
-        }
-      `}</style>
+      <style>
+  {`
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+  `}
+</style>
+
     </>
   );
 };
