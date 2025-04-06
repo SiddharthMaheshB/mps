@@ -28,6 +28,9 @@ import NewSocialPost from './pages/Social/NewPost.jsx'
 import PostView from './pages/Social/PostView.jsx'
 
 import SearchResults from './pages/SearchResults.jsx'
+import { ShopProvider } from './context/ShopContext'
+import OrderHistory from './pages/OrderHistory'
+
 // function App(props) {
 //  const loginb = true;
 //  const user = {
@@ -124,22 +127,84 @@ function GoogleCallbackHandler() {
   );
 }
 
+// Clear cart badge on startup
+if (typeof window !== 'undefined' && window.localStorage) {
+  const localCartString = window.localStorage.getItem('localCart');
+  if (!localCartString || localCartString === '[]') {
+    console.log('App: Empty cart on startup, ensuring cart data is clean');
+    window.localStorage.setItem('localCart', '[]');
+    setTimeout(() => {
+      window.dispatchEvent(new Event('cartUpdated'));
+    }, 200);
+  }
+}
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   
   // Check if user is logged in on app start
   useEffect(() => {
     const checkLoginStatus = () => {
+      setIsCheckingAuth(true);
       const token = localStorage.getItem('token');
-      if (token) {
+      
+      if (!token) {
+        // Clear any stale data if no token exists
+        localStorage.removeItem('user');
+        localStorage.removeItem('userId');
+        setIsLoggedIn(false);
+        setUser(null);
+        setIsCheckingAuth(false);
+        return;
+      }
+      
+      // Token exists, check if it's valid by parsing it
+      try {
+        // Basic token validation by checking structure
+        const tokenParts = token.split('.');
+        if (tokenParts.length !== 3) {
+          throw new Error('Invalid token format');
+        }
+        
+        // Decode the payload (middle part)
+        const payload = JSON.parse(atob(tokenParts[1]));
+        
+        // Check if token is expired
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (payload.exp && payload.exp < currentTime) {
+          console.log('Token expired, logging out');
+          handleLogout();
+          setIsCheckingAuth(false);
+          return;
+        }
+        
+        // Token appears valid
         setIsLoggedIn(true);
         
-        // Basic user info from localStorage - will be updated from API in Profile component
-        const userId = localStorage.getItem('userId');
-        if (!user && userId) {
+        // Get user data from localStorage
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try {
+            const parsedUser = JSON.parse(userData);
+            setUser(parsedUser);
+          } catch (error) {
+            console.error('Error parsing user data:', error);
+            // Fall back to basic user
+            setUser({
+              _id: payload.id || '',
+              name: "",
+              email: "",
+              mobile: "",
+              role: "Farmer",
+              avatar: "/1.png"
+            });
+          }
+        } else {
+          // Basic user info if no user data in localStorage
           setUser({
-            _id: userId,
+            _id: payload.id || '',
             name: "",
             email: "",
             mobile: "",
@@ -147,14 +212,93 @@ function App() {
             avatar: "/1.png"
           });
         }
+      } catch (error) {
+        console.error('Error validating token:', error);
+        handleLogout();
+      }
+      
+      setIsCheckingAuth(false);
+    };
+    
+    const handleLogout = () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userId');
+      setIsLoggedIn(false);
+      setUser(null);
+      
+      // Redirect to home page if not already there
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
       }
     };
     
+    // Add event listener for session expiration
+    window.addEventListener('session-expired', handleLogout);
+    
+    // Check login status
     checkLoginStatus();
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('session-expired', handleLogout);
+    };
   }, []);
+  
+  // Global function to handle unauthorized responses
+  const handleUnauthorized = () => {
+    // First trigger the session-expired event
+    const event = new Event('session-expired');
+    window.dispatchEvent(event);
+    
+    // Then redirect to the home page
+    if (window.location.pathname !== '/') {
+      window.location.href = '/';
+    }
+  };
+  
+  // Attach to window for global access
+  useEffect(() => {
+    window.handleUnauthorized = handleUnauthorized;
+    return () => {
+      delete window.handleUnauthorized;
+    };
+  }, []);
+  
+  // Show loading while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column'
+      }}>
+        <div style={{ marginBottom: '20px' }}>Checking authentication...</div>
+        <div 
+          style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '4px solid #f3f3f3',
+            borderTop: '4px solid #3498db',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} 
+        />
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
   
   return (
     <BrowserRouter>
+      <ShopProvider>
       <Routes>
         <Route path="/" element={<Layout login={isLoggedIn} user={user} setLogin={setIsLoggedIn} setUser={setUser} />}>
           <Route index element={<Home login={isLoggedIn} />}/>
@@ -175,12 +319,16 @@ function App() {
           <Route 
             path="profile" 
             element={
-              <Profile 
-                login={isLoggedIn} 
-                setLogin={setIsLoggedIn} 
-                user={user} 
-                setUser={setUser}
-              />
+              isLoggedIn ? (
+                <Profile 
+                  login={isLoggedIn} 
+                  setLogin={setIsLoggedIn} 
+                  user={user} 
+                  setUser={setUser}
+                />
+              ) : (
+                <Navigate to="/" replace />
+              )
             }
           />
     <Route path="shop" element={<EcommerceLayout login={isLoggedIn} />}>
@@ -188,6 +336,7 @@ function App() {
       <Route path="product/:productId" element={<ProductDetail />} />
       <Route path="cart" element={<Cart />} />
       <Route path="search" element={<SearchResults />} />
+      <Route path="order-history" element={<OrderHistory />} />
     </Route>
 
           {/* <Route path="shop" element={<EcommerceLayout login={isLoggedIn} />}>
@@ -226,6 +375,7 @@ function App() {
           }
         />
       </Routes>
+      </ShopProvider>
     </BrowserRouter>
   )
 }

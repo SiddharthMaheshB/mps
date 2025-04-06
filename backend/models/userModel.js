@@ -20,6 +20,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    address: {
+        type: String,
+        default: ''
+    },
+    state: {
+        type: String,
+        default: ''
+    },
+    country: {
+        type: String,
+        default: ''
+    },
     googleId: {
         type: String,
         sparse: true,

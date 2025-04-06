@@ -2,16 +2,16 @@ import { useSearchParams } from "react-router-dom";
 import ProductCard from "./ProductCard";
 const products = [
     
-      { id: 1, name: 'Fresh Carrots', price: 3, image: '/4.jpg' },
-      { id: 2, name: 'Tomatoes', price: 4, image: '/3.jpg' },
+      { id: 1, name: 'Fresh Carrots', price: 3, image: '/4.jpg', unit: 'kg', isLiquid: false },
+      { id: 2, name: 'Tomatoes', price: 4, image: '/3.jpg', unit: 'kg', isLiquid: false },
    
     
-      { id: 3, name: 'Organic Apples', price: 5, image: '/3.jpg' },
-      { id: 4, name: 'Bananas', price: 2, image: '/5.jpg' },
+      { id: 3, name: 'Organic Apples', price: 5, image: '/3.jpg', unit: 'kg', isLiquid: false },
+      { id: 4, name: 'Bananas', price: 2, image: '/5.jpg', unit: 'kg', isLiquid: false },
     
    
-      { id: 5, name: 'Dairy Milk', price: 7, image: '/5.jpg' },
-      { id: 6, name: 'Cheese', price: 10, image: '/4.jpg' },
+      { id: 5, name: 'Dairy Milk', price: 7, image: '/5.jpg', unit: 'Litre', isLiquid: true },
+      { id: 6, name: 'Cheese', price: 10, image: '/4.jpg', unit: 'kg', isLiquid: false },
     ]
 
 export default function SearchResults() {

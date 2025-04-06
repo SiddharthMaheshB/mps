@@ -1,28 +1,15 @@
 import mongoose from 'mongoose';
 
-const productSchema = new mongoose.Schema({
+const productSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
-    },
-    price: {
-        type: Number,
         required: true,
-        min: 0
+        trim: true
     },
-    image: {
-        type: String,
+    farmer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
-    },
-    category: {
-        type: String,
-        required: true,
-        enum: ['vegetables', 'fruits', 'dairy', 'grains', 'seeds', 'tools']
-    },
-    description: {
-        type: String,
-        required: false,
-        default: ''
     },
     inventory: {
         type: Number,
@@ -31,12 +18,25 @@ const productSchema = new mongoose.Schema({
     },
     unit: {
         type: String,
+        required: true,
         default: 'kg'
     },
-    seller: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: false
+    price: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    description: {
+        type: String,
+        default: ''
+    },
+    category: {
+        type: String,
+        default: 'Other'
+    },
+    image: {
+        type: String,
+        default: '/placeholder-product.jpg'
     }
 }, {
     timestamps: true

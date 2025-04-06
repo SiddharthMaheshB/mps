@@ -4,6 +4,7 @@ import "./Social.css";
 import NotificationBell from "./Social/Notification";
 import { Newspaper, MessageCircle, User } from "lucide-react";
 import { FaHome, FaRocket, FaUser } from "react-icons/fa";
+import axios from "axios";
 
 export default function SocialLayout({login}) {
     // Check for login
@@ -13,34 +14,71 @@ export default function SocialLayout({login}) {
     
     const [newSharedPosts, setNewSharedPosts] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Get current user from localStorage on component mount
+    // Fetch current user data from API on mount and when login state changes
     useEffect(() => {
-        try {
-            const userJson = localStorage.getItem('user');
-            if (userJson) {
-                const user = JSON.parse(userJson);
-                setCurrentUser(user);
-            } else {
-                // If user data isn't in localStorage but we have a token,
-                // create a basic user object instead of redirecting
+        const fetchUserData = async () => {
+            try {
+                setLoading(true);
                 const token = localStorage.getItem('token');
-                const userId = localStorage.getItem('userId');
-                if (token && userId) {
-                    console.log("No user data in localStorage, using basic user data");
-                    setCurrentUser({
-                        _id: userId,
-                        username: "User",
-                        avatar: "/1.png"
-                    });
+                
+                if (!token) {
+                    console.error("No authentication token found");
+                    return;
                 }
+                
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                };
+                
+                // Fetch user profile from API
+                const userResponse = await axios.get("http://localhost:5000/api/auth/profile", config);
+                
+                if (userResponse.data) {
+                    // Format user data
+                    const userData = {
+                        _id: userResponse.data._id,
+                        username: userResponse.data.username,
+                        email: userResponse.data.email,
+                        name: userResponse.data.username,
+                        avatar: userResponse.data.avatar || "/1.png",
+                        mobile: userResponse.data.mobile || "",
+                        role: userResponse.data.role || "Farmer"
+                    };
+                    
+                    // Update state and localStorage
+                    setCurrentUser(userData);
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    console.log("Updated user data from API:", userData);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                
+                // Fallback to localStorage if API call fails
+                try {
+                    const userJson = localStorage.getItem('user');
+                    if (userJson) {
+                        const user = JSON.parse(userJson);
+                        setCurrentUser(user);
+                        console.log("Using cached user data:", user);
+                    }
+                } catch (parseError) {
+                    console.error("Error parsing user data from localStorage:", parseError);
+                }
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error("Error parsing user data from localStorage:", error);
+        };
+        
+        if (login) {
+            fetchUserData();
         }
-    }, []);
+    }, [login]);
 
     // Function to clear notifications when viewing shared posts
     const clearNotifications = () => {
@@ -86,7 +124,7 @@ export default function SocialLayout({login}) {
 
                 {/* Page Content */}
                 <main className="social-main">
-                    <Outlet context={{ newSharedPosts, clearNotifications, currentUser }} />
+                    <Outlet context={{ newSharedPosts, clearNotifications, currentUser, loading }} />
                 </main>
             </div>
         </div>

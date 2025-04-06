@@ -1,66 +1,110 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import products from './data/products.js';
-import Product from './models/productModel.js';
 import User from './models/userModel.js';
+import Product from './models/productModel.js';
 import connectDB from './config/db.js';
 
 dotenv.config();
 
+// Sample product data
+const products = [
+    {
+        name: 'Fresh Carrots',
+        price: 40,
+        image: '4.jpg',
+        category: 'vegetables',
+        description: 'Fresh, organic carrots sourced directly from local farmers.',
+        inventory: 100,
+        unit: 'kg',
+        isLiquid: false
+    },
+    {
+        name: 'Tomatoes',
+        price: 30,
+        image: '3.jpg',
+        category: 'vegetables',
+        description: 'Ripe, juicy tomatoes perfect for salads and cooking.',
+        inventory: 80,
+        unit: 'kg',
+        isLiquid: false
+    },
+    {
+        name: 'Organic Apples',
+        price: 260,
+        image: '3.jpg',
+        category: 'fruits',
+        description: 'Premium organic apples with a crisp, sweet taste.',
+        inventory: 50,
+        unit: 'kg',
+        isLiquid: false
+    },
+    {
+        name: 'Bananas',
+        price: 50,
+        image: '5.jpg',
+        category: 'fruits',
+        description: 'Ripe, sweet bananas high in potassium and other nutrients.',
+        inventory: 120,
+        unit: 'kg',
+        isLiquid: false
+    },
+    {
+        name: 'Dairy Milk',
+        price: 51,
+        image: '5.jpg',
+        category: 'dairy',
+        description: 'Fresh, pasteurized milk from grass-fed cows.',
+        inventory: 30,
+        unit: 'Litre',
+        isLiquid: true
+    },
+    {
+        name: 'Cheese',
+        price: 420,
+        image: '4.jpg',
+        category: 'dairy',
+        description: 'Premium aged cheese made from the finest milk.',
+        inventory: 45,
+        unit: 'Kg',
+        isLiquid: false
+    }
+];
+
+// Connect to MongoDB
 connectDB();
 
+// Import data function
 const importData = async () => {
     try {
         // Clear existing data
         await Product.deleteMany();
-
-        // Create admin user
-        const adminUser = await User.findOne({ email: 'admin@example.com' });
         
-        let adminId;
+        // Insert new data
+        await Product.insertMany(products);
         
-        if (adminUser) {
-            adminId = adminUser._id;
-        } else {
-            const createdAdmin = await User.create({
-                username: 'admin',
-                email: 'admin@example.com',
-                password: 'password123',
-                mobile: '1234567890'
-            });
-            adminId = createdAdmin._id;
-        }
-
-        // Add admin as seller to all products
-        const sampleProducts = products.map(product => {
-            return { ...product, seller: adminId };
-        });
-
-        // Insert products
-        await Product.insertMany(sampleProducts);
-
-        console.log('Data Imported!');
+        console.log('Data imported successfully!');
         process.exit();
     } catch (error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`Error importing data: ${error.message}`);
         process.exit(1);
     }
 };
 
+// Delete all data function
 const destroyData = async () => {
     try {
-        // Delete all data
+        // Delete all existing data
         await Product.deleteMany();
-
-        console.log('Data Destroyed!');
+        
+        console.log('Data destroyed successfully!');
         process.exit();
     } catch (error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`Error deleting data: ${error.message}`);
         process.exit(1);
     }
 };
 
-// Run based on command line argument
+// Check for -d flag to destroy data
 if (process.argv[2] === '-d') {
     destroyData();
 } else {

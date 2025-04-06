@@ -107,6 +107,8 @@ router.post('/unfollow/:username', unfollowUser);
 router.get('/friends', getFriends);
 router.get('/followers', getFollowers);
 router.get('/following', getFollowing);
+router.get('/followers/:userId', getFollowers);
+router.get('/following/:userId', getFollowing);
 router.get('/friends/suggestions', getFriendSuggestions);
 router.post('/friends/request', sendFriendRequest);
 router.put('/friends/respond/:id', respondToFriendRequest);

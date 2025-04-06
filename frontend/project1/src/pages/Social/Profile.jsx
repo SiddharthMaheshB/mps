@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useOutletContext } from "react-router-dom";
 import "./Profile.css";
 import axios from "axios";
 
@@ -15,13 +15,40 @@ export default function SocialProfile() {
     const [following, setFollowing] = useState([]);
     const [loadingConnections, setLoadingConnections] = useState(false);
     const navigate = useNavigate();
+    
+    // Get the user data from the Social layout context
+    const { currentUser, loading: contextLoading } = useOutletContext() || {};
 
-    // Debug log to check the username parameter
+    // Debug log to check the username parameter and currentUser data
     useEffect(() => {
         console.log("Profile page - Username parameter:", username);
-    }, [username]);
+        console.log("Current user from context:", currentUser);
+    }, [username, currentUser]);
 
     useEffect(() => {
+        // Main effect to fetch profile data based on username parameter
+        // Don't fetch until we have the current user context
+        if (contextLoading) {
+            console.log("Context still loading, waiting for user data...");
+            return;
+        }
+        
+        // Function to create a user object from API data
+        const createUserObject = (authData, socialData = null) => {
+            return {
+                _id: authData._id,
+                name: authData.username,
+                username: authData.username,
+                email: authData.email,
+                profilePic: authData.avatar || "/1.png",
+                bio: socialData?.bio || "Farmer at FarmConnect",
+                farmLocation: socialData?.farmLocation || "India",
+                followers: socialData?.followers || 3,
+                following: socialData?.following || 3,
+                posts: socialData?.posts || []
+            };
+        };
+        
         const fetchUserProfile = async () => {
             setLoading(true);
             setError("");
@@ -29,7 +56,7 @@ export default function SocialProfile() {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    navigate('/login');
+                    navigate('/');
                     return;
                 }
                 
@@ -39,50 +66,25 @@ export default function SocialProfile() {
                     }
                 };
                 
-                // Try to get user data from localStorage first for faster display
-                let userData = null;
-                const userJson = localStorage.getItem('user');
-                if (userJson && username === 'me') {
-                    try {
-                        userData = JSON.parse(userJson);
-                        console.log("Loaded user data from localStorage:", userData);
-                    } catch (err) {
-                        console.warn("Failed to parse user data from localStorage", err);
-                    }
-                }
-                
-                // Get the current logged-in user info first
-                let currentUserDetails = null;
+                // Handle 'me' username parameter or if viewing own profile
                 let isCurrentUserProfile = false;
                 let targetUsername = username;
                 
-                try {
-                    // If we have user data from localStorage and username is 'me',
-                    // use that instead of making an API call
-                    if (userData && username === 'me') {
-                        currentUserDetails = userData;
-                        isCurrentUserProfile = true;
-                        targetUsername = userData.username;
+                // If username is 'me' use the currentUser from context
+                if (username === 'me') {
+                    isCurrentUserProfile = true;
+                    
+                    // Use the username from context
+                    if (currentUser && currentUser.username) {
+                        targetUsername = currentUser.username;
                     } else {
-                        // Use API endpoint that matches your backend
-                        const currentUserResponse = await axios.get("http://localhost:5000/api/auth/profile", config);
-                        currentUserDetails = currentUserResponse.data;
-                        console.log("Current logged-in user:", currentUserDetails);
-                        
-                        // Handle 'me' username parameter
-                        if (username === 'me') {
-                            isCurrentUserProfile = true;
-                            targetUsername = currentUserDetails.username;
-                        } else if (username === currentUserDetails.username) {
-                            isCurrentUserProfile = true;
-                        }
+                        console.error("No currentUser found in context");
+                        setError("Failed to load profile data. Please try again.");
+                        setLoading(false);
+                        return;
                     }
-                } catch (err) {
-                    console.error("Error fetching current user:", err);
-                    // Don't navigate away on error, just show an error message
-                    setError("Failed to load profile data. Please try again.");
-                    setLoading(false);
-                    return;
+                } else if (currentUser && username === currentUser.username) {
+                    isCurrentUserProfile = true;
                 }
                 
                 console.log(`Is this the current user's profile? ${isCurrentUserProfile}`);
@@ -101,19 +103,8 @@ export default function SocialProfile() {
                             console.warn("Could not fetch social profile, using auth data only:", socialErr);
                         }
                         
-                        // Create full user profile combining auth and social data
-                        const userData = {
-                            _id: currentUserDetails._id,
-                            name: currentUserDetails.username,
-                            username: currentUserDetails.username,
-                            email: currentUserDetails.email,
-                            profilePic: currentUserDetails.avatar || "/1.png",
-                            bio: socialData?.bio || "Farmer at FarmConnect",
-                            farmLocation: socialData?.farmLocation || "India",
-                            followers: socialData?.followers || 0,
-                            following: socialData?.following || 0,
-                            posts: socialData?.posts || []
-                        };
+                        // Create full user profile combining currentUser and social data
+                        const userData = createUserObject(currentUser, socialData);
                         
                         setUser(userData);
                         console.log("Setting user data for current user:", userData);
@@ -137,7 +128,7 @@ export default function SocialProfile() {
                                     `http://localhost:5000/api/social/follow/status/${response.data._id || targetUsername}`, 
                                     config
                                 );
-                        setIsFollowing(followResponse.data.isFollowing);
+                                setIsFollowing(followResponse.data.isFollowing);
                                 console.log("Follow status:", followResponse.data.isFollowing);
                             } catch (followErr) {
                                 console.error("Follow status check error:", followErr);
@@ -162,13 +153,13 @@ export default function SocialProfile() {
         };
         
         fetchUserProfile();
-    }, [username, navigate]);
+    }, [username, navigate, currentUser, contextLoading]);
 
     const toggleFollow = async () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
             
@@ -201,7 +192,7 @@ export default function SocialProfile() {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
             
@@ -211,7 +202,7 @@ export default function SocialProfile() {
                 }
             };
             
-            const response = await axios.get('http://localhost:5000/api/social/followers', config);
+            const response = await axios.get(`http://localhost:5000/api/social/followers/${userId}`, config);
             
             if (response.data && Array.isArray(response.data)) {
                 // Process follower data to ensure all needed fields
@@ -238,7 +229,7 @@ export default function SocialProfile() {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
             
@@ -248,7 +239,7 @@ export default function SocialProfile() {
                 }
             };
             
-            const response = await axios.get('http://localhost:5000/api/social/following', config);
+            const response = await axios.get(`http://localhost:5000/api/social/following/${userId}`, config);
             
             if (response.data && Array.isArray(response.data)) {
                 // Process following data to ensure all needed fields
@@ -284,7 +275,7 @@ export default function SocialProfile() {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
             
@@ -311,7 +302,7 @@ export default function SocialProfile() {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
             
@@ -367,9 +358,11 @@ export default function SocialProfile() {
         </div>
     );
 
-    // Check if this is the current user's profile
-    const currentUserData = JSON.parse(localStorage.getItem('user') || '{}');
-    const isOwnProfile = (username === 'me' || (user && currentUserData && user.username === currentUserData.username));
+    // Check if this is the current user's profile using currentUser from context
+    const isOwnProfile = username === 'me' || 
+                        (user && currentUser && 
+                        (user.username === currentUser.username || 
+                         user._id === currentUser._id));
 
     return (
         <div className="profile-page-wrapper">

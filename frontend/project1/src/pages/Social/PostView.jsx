@@ -21,7 +21,7 @@ const PostView = () => {
                 const token = localStorage.getItem('token');
                 
                 if (!token) {
-                    navigate('/login');
+                    navigate('/');
                     return;
                 }
                 
@@ -81,7 +81,7 @@ const PostView = () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 // Redirect to login if not logged in
-                navigate('/login');
+                navigate('/');
                 return;
             }
 
@@ -118,8 +118,8 @@ const PostView = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                // Redirect to login if not logged in
-                navigate('/login');
+                // Redirect to home if not logged in
+                navigate('/');
                 return;
             }
 
@@ -152,7 +152,7 @@ const PostView = () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 // Redirect to login if not logged in
-                navigate('/login');
+                navigate('/');
                 return;
             }
 

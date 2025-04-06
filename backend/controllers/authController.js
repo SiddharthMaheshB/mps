@@ -496,7 +496,10 @@ const getUserProfile = asyncHandler(async (req, res) => {
             username: user.username,
             email: user.email,
             mobile: user.mobile,
-            avatar: user.avatar || ''
+            avatar: user.avatar || '',
+            address: user.address || '',
+            state: user.state || '',
+            country: user.country || ''
         });
     } else {
         res.status(404);
@@ -530,6 +533,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.mobile = req.body.mobile || user.mobile;
     
+    // Update address fields if provided
+    user.address = req.body.address || user.address;
+    user.state = req.body.state || user.state;
+    user.country = req.body.country || user.country;
+    
     // If avatar is provided, update it
     if (req.body.avatar) {
         user.avatar = req.body.avatar;
@@ -547,8 +555,49 @@ const updateUserProfile = asyncHandler(async (req, res) => {
             username: updatedUser.username,
             email: updatedUser.email,
             mobile: updatedUser.mobile,
-            avatar: updatedUser.avatar || ''
+            avatar: updatedUser.avatar || '',
+            address: updatedUser.address || '',
+            state: updatedUser.state || '',
+            country: updatedUser.country || ''
         }
+    });
+});
+
+// Update user password
+const updateUserPassword = asyncHandler(async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    
+    // Validate inputs
+    if (!currentPassword || !newPassword) {
+        res.status(400);
+        throw new Error('Current password and new password are required');
+    }
+    
+    // Get user from database
+    const user = await User.findById(req.user._id);
+    
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+    
+    // Verify current password
+    const isMatch = await user.matchPassword(currentPassword);
+    
+    if (!isMatch) {
+        res.status(401);
+        throw new Error('Current password is incorrect');
+    }
+    
+    // Update password
+    user.password = newPassword;
+    
+    // Save the updated user
+    await user.save();
+    
+    res.json({
+        success: true,
+        message: 'Password updated successfully'
     });
 });
 
@@ -560,5 +609,6 @@ export {
     getGoogleAuthURL, 
     logoutUser, 
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    updateUserPassword
 }; 

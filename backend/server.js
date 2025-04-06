@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import socialRoutes from './routes/socialRoutes.js';
 import shopRoutes from './routes/shopRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -38,11 +39,39 @@ app.use('/api/admin', limiter);
 
 // Security middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function(origin, callback) {
+        // Allow all origins for now during development
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:5173',
+            'http://localhost:5174',
+            'http://127.0.0.1:3000',
+            'http://127.0.0.1:5173',
+            'http://127.0.0.1:5174'
+        ];
+        
+        // Allow requests with no origin (like mobile apps, curl, or Postman)
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log("Origin rejected:", origin);
+            callback(null, true); // Allow all origins in development
+        }
+    },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
+// Add logging middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    console.log('Headers:', JSON.stringify(req.headers));
+    if (req.body && Object.keys(req.body).length > 0) {
+        console.log('Body:', JSON.stringify(req.body));
+    }
+    next();
+});
 
 // Body parsing middleware
 app.use(express.json());
@@ -54,6 +83,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/social', socialRoutes);
 app.use('/api/shop', shopRoutes);
+app.use('/api/products', productRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
