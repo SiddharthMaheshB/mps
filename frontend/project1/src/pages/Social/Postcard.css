@@ -1,137 +1,529 @@
 .post-card {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    
-    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
+    overflow: hidden;
+    width: 100%;
 }
 
-.post-card:hover {
-    transform: scale(1.02);
-   
+.shared-by-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f5f9ff;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    color: #666;
+    border-bottom: 1px solid #eee;
+}
+
+.shared-by-info .sharer-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 2px;
+}
+
+.shared-by-info svg {
+    color: #3498db;
+}
+
+.shared-by-info a {
+    color: #3498db;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.shared-by-info a:hover {
+    text-decoration: underline;
 }
 
 .post-header {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    padding: 15px;
 }
 
 .user-img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    object-fit: cover;
     margin-right: 10px;
-    border: 2px solid #fff;
 }
 
 .username {
     font-weight: bold;
-    color: rgb(56, 55, 55);
+    color: #333;
+}
+
+.username a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.username a:hover {
+    color: #3498db;
+}
+
+.post-content {
+    width: 100%;
+}
+
+.post-caption {
+    padding: 0 15px 15px;
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 .post-img {
     width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.post-text-content {
+    min-height: 60px;
+    max-height: 300px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin: 0 15px 15px;
+    line-height: 1.6;
+    color: #333;
+    font-size: 16px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-y: auto;
+    border: 1px solid #eee;
 }
 
 .post-actions {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 
-.post-actions button {
-    background: transparent;
+.action-btn {
+    background: none;
     border: none;
-    font-size: 18px;
     cursor: pointer;
-    color: rgb(51, 50, 50);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #555;
+    transition: color 0.2s;
+    padding: 8px 12px;
+    border-radius: 4px;
 }
 
-.post-actions button:hover {
-    color: #047013;
+.action-btn:hover {
+    background-color: #f5f5f5;
 }
 
-.caption {
+.action-btn.liked {
+    color: #e74c3c;
+}
+
+.action-btn span {
     font-size: 14px;
-    color: #494747;
 }
 
-/* --- Comments Section --- */
-.comments-section {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 10px;
-}
-
-.comments-section h4 {
-    color: #fff;
-    margin-bottom: 5px;
-}
-
-.comments-section p {
-    font-size: 14px;
-    color: #ddd;
-    margin: 5px 0;
-}
-
-.comments-section input {
-    width: 80%;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-}
-
-.comments-section button {
-    background: #00ffa2;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 5px;
-}
-
-/* --- Share Menu --- */
+/* Share Options */
 .share-options {
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: #fafafa;
+}
+
+.share-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.share-header h4 {
+    margin: 0;
+    color: #333;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #888;
+    padding: 0 5px;
+}
+
+.close-btn:hover {
+    color: #333;
 }
 
 .share-options h4, .share-options h5 {
-    color: #fff;
-    margin-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
 }
 
-.share-options button {
-    background: #00ffa2;
-    border: none;
-    padding: 8px 12px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
+.in-app-sharing, .external-sharing {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.share-options button:hover {
-    background: #00cc82;
+.share-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
 }
 
-/* --- In-App Friend Selection --- */
-.friend-option {
+.share-tab {
     display: flex;
     align-items: center;
-    color: #fff;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.share-tab:hover {
+    background-color: #f0f0f0;
+}
+
+.share-tab.active {
+    background-color: #e2f1ff;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.connection-list {
+    display: flex;
+    flex-direction: column;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.connection-option {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.connection-option:hover {
+    background-color: #f5f5f5;
+}
+
+.connection-option input {
+    margin-right: 10px;
+}
+
+.connection-option img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.connection-type {
+    margin-left: auto;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background-color: #e2f1ff;
+    color: #3498db;
+}
+
+.selection-summary {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 10px 0;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.no-connections {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.no-connections p {
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.no-connections small {
+    color: #999;
+}
+
+.share-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.share-button:hover {
+    background-color: #388e3c;
+}
+
+.share-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.social-share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    transition: opacity 0.2s;
+}
+
+.social-share-btn:hover {
+    opacity: 0.9;
+}
+
+.social-share-btn svg {
+    margin-right: 5px;
+}
+
+.whatsapp { background-color: #25D366; }
+.facebook { background-color: #1877F2; }
+.twitter { background-color: #1DA1F2; }
+.linkedin { background-color: #0A66C2; }
+.copy { background-color: #6c757d; }
+
+/* Comments Section */
+.comments-section {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: #fafafa;
+}
+
+.comments-section h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.comments-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.comment-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 15px;
+    color: #888;
+    font-style: italic;
+}
+
+.comment-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
     font-size: 14px;
 }
 
-.friend-option input {
-    margin-right: 5px;
+.comment-input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.comment-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.comment-btn:hover {
+    background-color: #2980b9;
+}
+
+.comment-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        border-radius: 0;
+        margin-bottom: 10px;
+    }
+    
+    .social-share-buttons {
+        gap: 5px;
+    }
+    
+    .social-share-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .connection-list {
+        max-height: 150px;
+    }
+}
+
+.post-view-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-view-header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.post-view-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.navigation-links {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background-color: #f8f9fa;
+    color: #444;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.deleted-post-card {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    opacity: 0.9;
+    box-shadow: none;
+}
+
+.deleted-post-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #d32f2f;
+}
+
+.deleted-post-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #d32f2f;
+}
+
+.deleted-post-card p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.deleted-post-card a {
+    color: #3498db;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.deleted-post-card a:hover {
+    text-decoration: underline;
 }
 
 

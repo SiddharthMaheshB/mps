@@ -1,40 +1,71 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-function Navbar({ login, ToFooter, ToFeatures }) {
+function Navbar({ login, user, setLogin, setUser, ToFooter, ToFeatures }) {
+  useEffect(() => {
+    console.log("Navbar user:", user);
+  }, [user]);
+
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     setShowLogoutPopup(true);
   };
 
-  const confirmLogout = () => {
-    setShowLogoutPopup(false);
-    console.log("User logged out!"); // Replace with actual logout logic
+  const confirmLogout = async () => {
+    try {
+      // Call logout API (optional, depends on your backend)
+      const token = localStorage.getItem("token");
+      if (token) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+        await axios.post("http://localhost:5000/api/auth/logout", {}, config);
+      }
+    } catch (error) {
+      console.error("Logout API error:", error);
+    } finally {
+      // Clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("user");
+      
+      // Update state
+      setLogin(false);
+      setUser(null);
+      
+      // Hide popup and redirect to home
+      setShowLogoutPopup(false);
+      navigate("/");
+    }
   };
 
   const scrollTo= (ref)=>{
-    console.log("Hello world");
-      console.log(ref)
-      console.log(ref.current)
-      ref.current.scrollIntoView({behavior:"smooth"})
-      
-  }
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({behavior:"smooth"});
+    }
+  };
 
   if (login)
     return (
       <>
         <nav style={styles.navbar}>
-        <a  href="/" aria-label="Home"  style={{textDecoration:"none",color:"white"}}>
-        <Logo style={styles.logo} />
-          </a>
+          <div style={styles.leftGroup}>
+            <a href="/" aria-label="Home" style={{textDecoration:"none",color:"white"}}>
+              <Logo style={styles.logo} />
+            </a>
+          </div>
           
-          <div>
-            <Link to="/social" style={styles.link}>Social</Link>
-            <Link to="/shop" style={styles.link}>Shop</Link>
-            <Link to="/farmercorner" style={styles.link}>Farmer's Corner</Link>
-            <Link to="/profile" style={styles.link}>Profile</Link>
+          <div style={styles.rightGroup}>
+            <Link to="/social" style={styles.navLink}>Social</Link>
+            <Link to="/shop" style={styles.navLink}>Shop</Link>
+            <Link to="/farmercorner" style={styles.navLink}>Farmer's Corner</Link>
+            <Link to="/profile" style={styles.navLink}>Profile</Link>
             <button style={styles.button} onClick={handleLogout}>Logout</button>
           </div>
         </nav>
@@ -54,10 +85,14 @@ function Navbar({ login, ToFooter, ToFeatures }) {
 
   return (
     <nav style={styles.navbar}>
-      <Logo style={styles.logo} />
-      <div>
-        <button onClick={() => scrollTo(ToFeatures)} style={styles.link}>About</button>
-        <button onClick={() => scrollTo(ToFooter)} style={styles.link}>Contact</button>
+      <div style={styles.leftGroup}>
+        <a href="/" aria-label="Home" style={{textDecoration:"none",color:"white"}}>
+          <Logo style={styles.logo} />
+        </a>
+      </div>
+      <div style={styles.rightGroup}>
+        <button onClick={() => scrollTo(ToFeatures)} style={styles.navLink}>About</button>
+        <button onClick={() => scrollTo(ToFooter)} style={styles.navLink}>Contact</button>
         <Link style={styles.button} to="/login">Login</Link>
         <Link style={styles.button} to="/register">Register</Link>
       </div>
@@ -76,21 +111,27 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "8px 10px",
+    padding: "8px 20px",
     zIndex: 10,
     overflowX:"hidden",
     boxSizing: "border-box",
   },
+  leftGroup: {
+    display: "flex",
+    alignItems: "center",
+  },
+  rightGroup: {
+    display: "flex",
+    alignItems: "center",
+    gap: "30px", // Even spacing between all items
+  },
   logo: {
     fontSize: "24px",
     fontWeight: "bold",
-    
-
   },
-  link: {
+  navLink: {
     color: "white",
     textDecoration: "none",
-    margin: "0 10px",
     fontSize: "18px",
     background: "transparent",
     border: 0,
@@ -102,8 +143,7 @@ const styles = {
     borderRadius: "5px",
     color: "white",
     fontSize: "18px",
-    margin: "0 10px",
-    padding: "5px 10px",
+    padding: "5px 15px",
     textDecoration:"none",
     cursor: "pointer",
   },
@@ -125,6 +165,7 @@ const styles = {
     borderRadius: "10px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
     textAlign: "center",
+    color: "black",
   },
   popupButton: {
     margin: "10px",
