@@ -37,10 +37,7 @@ const pestici = [
 const COL = ["#0088FE", "#00C49F", "#FFBB28"];
 
 const Recommendations = ({ detectedPesticide, COLORS=COL, pesticideDistribution= pestici,seasonalTrends=seas,detectionHistory=detec,recommendations =reco}) => {
-  const pesticideInfo = recommendations[detectedPesticide] || {
-    remedy: "No specific remedy found.",
-    dosage: "No dosage guidelines available.",
-  };
+ 
 
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -51,15 +48,17 @@ const Recommendations = ({ detectedPesticide, COLORS=COL, pesticideDistribution=
 
       {/* 🔹 Remedies */}
       <div className="remedy-container">
-        <strong>Suggested Remedy:</strong>
-        <p>{pesticideInfo.remedy}</p>
+        
+        <p><strong>Type:</strong>{recommendations.remedies[0]["remedy_type"]}</p>
+        <p><strong>Description:</strong>{recommendations.remedies[0]["description"]}</p>
+        <p><strong>Dosage:</strong>{recommendations.remedies[0]["dosage"]}</p>
       </div>
 
-      {/* 🔹 Dosage */}
+      {/* 🔹 Dosage 
       <div className="remedy-container">
         <strong>Dosage & Application:</strong>
         <p>{pesticideInfo.dosage}</p>
-      </div>
+      </div>*/}
 
       {/* 🔹 Smart Alerts */}
      

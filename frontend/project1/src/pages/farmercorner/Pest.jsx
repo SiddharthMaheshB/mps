@@ -12,10 +12,22 @@ export default function Pest({login}){
   
 
     const reco = {
-        musk: {
-          remedy: "Neem oil spray is an effective and eco-friendly alternative for controlling musk pests.",
-          dosage: "Mix 5ml of neem oil with 1 liter of water and spray on affected plants every 7 days.",
-        },
+      
+          "disease": "Powdery Mildew (Erysiphe spp.)",
+          "remedies": [
+            {
+              "remedy_type": "Chemical Treatment",
+              "description": "Apply systemic fungicides such as triadimefon or myclobutanil when symptoms first appear. Repeat applications every 10-14 days as per label instructions.",
+              "dosage": "Use 1-2 ml of fungicide per liter of water, depending on the product. Always follow the manufacturer's guidelines."
+            },
+            {
+              "remedy_type": "Organic Treatment",
+              "description": "Spray with a mixture of baking soda (sodium bicarbonate) and water, optionally with a bit of horticultural oil to increase effectiveness. Apply weekly during high humidity periods.",
+              "dosage": "Mix 1 tablespoon of baking soda and 1 teaspoon of horticultural oil in 1 liter of water."
+            }
+          ]
+        
+        
         // Add more pesticides here...
       };
       
@@ -52,32 +64,33 @@ export default function Pest({login}){
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            
-            const recoRes = await fetch("/api/recommendation");
+      const fetchData = async () => {
+        if (!analysisData?.crop || !analysisData?.disease) return;
+        
+        try {
+          const crop = analysisData.crop.toLowerCase().replace(" ", "_");
+          const disease = analysisData.disease.toLowerCase().replace(" ", "_");
+          const recoRes = await fetch(`http://localhost:8000/api/recommendation/${crop}/${disease}`);
+
+          
+          const recoJson = await recoRes.json();
     
-            
-            const recoJson = await recoRes.json();
-    
-            // Check if response has meaningful data
-            
-    
-            if (recoJson && Object.keys(recoJson).length > 0) {
-              setRecommendationData(recoJson);
-            }
-          } catch (error) {
-            console.error("API fetch failed, using default data.");
+          if (recoJson && Object.keys(recoJson).length > 0) {
+            setRecommendationData(recoJson);
           }
-        };
+        } catch (error) {
+          console.error("API fetch failed, using default data.");
+        }
+      };
     
-        fetchData();
-      }, []);
+      fetchData();
+    }, [analysisData]);  
+    
 
      
       const finalAnalysis = analysisData || {
         severity: 60,
-        pesticide: "musk",
+        pesticide: "Powdery Mildew",
         confidence: 70,
         img: image,
       };
