@@ -24,7 +24,20 @@ import EcommerceLayout from './pages/EcommerceLayout.jsx'
 import Cart from './pages/Cart.jsx'
 import SocialProfile from './pages/Social/Profile.jsx'
 import NewSocialPost from './pages/Social/NewPost.jsx'
+
 import PostView from './pages/Social/PostView.jsx'
+
+import SearchResults from './pages/SearchResults.jsx'
+// function App(props) {
+//  const loginb = true;
+//  const user = {
+//   name: "John Doe",
+//   avatar: img, // Replace with an actual image URL
+//   role: "Farmer", // Can be "Farmer" or any other role
+//   mobile:"1234567890",
+//   email:"johndoe@gmail.com"
+// };
+// >>>>>>> upstream/main
 
 // Helper component to handle Google OAuth redirect
 function GoogleCallbackHandler() {
@@ -170,12 +183,18 @@ function App() {
               />
             }
           />
+    <Route path="shop" element={<EcommerceLayout login={loginb} />}>
+      <Route index element={<Shop login={loginb} />} />
+      <Route path="product/:productId" element={<ProductDetail />} />
+      <Route path="cart" element={<Cart />} />
+      <Route path="search" element={<SearchResults />} />
+    </Route>
 
-          <Route path="shop" element={<EcommerceLayout login={isLoggedIn} />}>
+          {/* <Route path="shop" element={<EcommerceLayout login={isLoggedIn} />}>
             <Route index element={<Shop login={isLoggedIn} />} />
             <Route path=":productId" element={<ProductDetail />} />
             <Route path="cart" element={<Cart />} />
-          </Route>
+          </Route> */}
 
           <Route path="/farmercorner" element={<FCLayout login={isLoggedIn}/>}>
             <Route index element={<FCIndex login={isLoggedIn}/>}/>
