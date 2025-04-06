@@ -11,7 +11,7 @@ export default function FCLayout({login}){
         )
     }
     const tabs = [
-        {path:"/farmercorner/pest-disease-detection" ,label:"Pest-Disease-Detection"},
+        {path:"/farmercorner/pest-disease-detection" ,label:"Disease-Detection"},
         {path:"/farmercorner/fertilizer-recommendation"  ,label:"Fertiliser-Recommendation"},
         {path:"/farmercorner/organic-farming-tutorials"  ,label:"Tutorials"},
         {path:"/farmercorner/crop-recommendation", label:"Crop-Recommendation"},

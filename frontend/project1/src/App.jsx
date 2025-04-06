@@ -24,6 +24,7 @@ import EcommerceLayout from './pages/EcommerceLayout.jsx'
 import Cart from './pages/Cart.jsx'
 import SocialProfile from './pages/Social/Profile.jsx'
 import NewSocialPost from './pages/Social/NewPost.jsx'
+import SearchResults from './pages/SearchResults.jsx'
 function App(props) {
  const loginb = true;
  const user = {
@@ -55,9 +56,9 @@ function App(props) {
 
     <Route path="shop" element={<EcommerceLayout login={loginb} />}>
       <Route index element={<Shop login={loginb} />} />
-      <Route path=":productId" element={<ProductDetail />} />
+      <Route path="product/:productId" element={<ProductDetail />} />
       <Route path="cart" element={<Cart />} />
-      
+      <Route path="search" element={<SearchResults />} />
     </Route>
 
     <Route path="/farmercorner" element={<FCLayout login={loginb}/>}>
