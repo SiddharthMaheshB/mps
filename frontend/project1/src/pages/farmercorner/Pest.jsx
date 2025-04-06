@@ -9,6 +9,7 @@ export default function Pest({login}){
     const [analysisData, setAnalysisData] = useState(null);
     const [recommendationData, setRecommendationData] = useState(null);
 
+  
 
     const reco = {
         musk: {
@@ -53,16 +54,14 @@ export default function Pest({login}){
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const analysisRes = await fetch("/api/analysis");
+            
             const recoRes = await fetch("/api/recommendation");
     
-            const analysisJson = await analysisRes.json();
+            
             const recoJson = await recoRes.json();
     
             // Check if response has meaningful data
-            if (analysisJson && analysisJson.severity) {
-              setAnalysisData(analysisJson);
-            }
+            
     
             if (recoJson && Object.keys(recoJson).length > 0) {
               setRecommendationData(recoJson);
@@ -75,6 +74,7 @@ export default function Pest({login}){
         fetchData();
       }, []);
 
+     
       const finalAnalysis = analysisData || {
         severity: 60,
         pesticide: "musk",
@@ -91,10 +91,10 @@ export default function Pest({login}){
         <div className="section-container">
         <div className="section1">
         <h4 className="inputheading">Upload an Image for Disease Detection</h4>
-            <ImageUploader buttonname={"Detect Disease"}/>
+            <ImageUploader onDetect = {setAnalysisData} buttonname={"Detect Disease"}/>
         </div>
         <div className="section2">
-            <Analysis severity={finalAnalysis.severity} pesticide={finalAnalysis.pesticide} confidence={finalAnalysis.confidence} image={finalAnalysis.img} />
+            <Analysis severity={finalAnalysis.severity} crop = {finalAnalysis.crop} pesticide={finalAnalysis.pesticide} confidence={finalAnalysis.confidence} image={finalAnalysis.img} />
         </div>
         <div className="section3">
             <Recommendations detectedPesticide={finalAnalysis.pesticide} COLORS={COL} pesticideDistribution= {pestici} seasonalTrends={seas} detectionHistory={detec} recommendations ={finalReco}/>

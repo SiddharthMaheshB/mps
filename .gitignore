@@ -2,4 +2,7 @@ mpsenv/
 diseasedetection/data/
 diseasedetection/plantkaggle
 myenv
+fastapi/__pycache__
+diseasedetection/weights
+diseasedetection/__pycache__
 

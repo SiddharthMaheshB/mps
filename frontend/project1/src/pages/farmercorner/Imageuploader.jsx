@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { FiUploadCloud, FiCamera } from "react-icons/fi";
 
-const ImageUploader = ({ onImageUpload,buttonname }) => {
+const ImageUploader = ({ onImageUpload, onDetect,buttonname }) => {
+  const FASTAPI_URL = import.meta.env.VITE_FASTAPI_URL;
   const [image, setImage] = useState(null);
   const [cropType, setCropType] = useState("");
   const fileInputRef = useRef(null);
@@ -77,28 +78,49 @@ const ImageUploader = ({ onImageUpload,buttonname }) => {
     }
   };
 
-  const handleDetectPesticide = () => {
-    if (!image || !cropType) {
-      alert("Please upload an image and select a crop type.");
+  const handleDetectPesticide = async () => {
+    if (!image) {
+      alert("Please upload an image.");
       return;
     }
   
-    const simulatedPayload = {
-      cropType,
-      imageData: image,
+    const payload = {
+      imageData: image, // already base64
       detectedAt: new Date().toISOString()
     };
   
-    console.log("🔬 Sending to pesticide detection API:", simulatedPayload);
-    alert("🧪 Detection in progress... (Simulated)\n\nCheck console for payload.");
+    try {
+      const response = await fetch("http://localhost:8000/api/analysis", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
   
-    setFadeOutImage(true);
-    setTimeout(() => {
-      setImage(null);
-      setCropType("");
-      setFadeOutImage(false);
-    }, 500);
+      if (!response.ok) {
+        throw new Error("Detection failed");
+      }
+  
+      const data = await response.json();
+      data.img = `${FASTAPI_URL}${data.img}`;
+      console.log("✅ Detection result:", data);
+      
+      alert(`✅ Detection Complete!\n\nDisease: ${data.disease}\nSeverity: ${data.severity}%\nConfidence: ${data.confidence}%`);
+
+      onDetect(data);
+      setFadeOutImage(true);
+      setTimeout(() => {
+        setImage(null);
+        setCropType("");
+        setFadeOutImage(false);
+      }, 500);
+    } catch (err) {
+      console.error("❌ Error during detection:", err);
+      alert("Something went wrong. Check console.");
+    }
   };
+  
   
   return (
     <>
@@ -136,18 +158,7 @@ const ImageUploader = ({ onImageUpload,buttonname }) => {
         </div>
       )}
 
-      {/* Crop Type Selection */}
-      <select
-        className="crop-type"
-        value={cropType}
-        onChange={(e) => setCropType(e.target.value)}
-      >
-        <option value="">Select Crop Type</option>
-        <option value="wheat">Wheat</option>
-        <option value="rice">Rice</option>
-        <option value="corn">Corn</option>
-        <option value="soybean">Soybean</option>
-      </select>
+      
 
       {/* Preview Uploaded Image */}
       {image && (

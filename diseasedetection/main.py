@@ -17,18 +17,19 @@ from sklearn.metrics import confusion_matrix,accuracy_score, classification_repo
 import keras
 import pickle
 
-def load_models():
-    stage_one = load_model('stage_one.h5')
-    with open('models.pkl', 'rb') as f:
+def load_models(lpath1,lpath2):
+    stage_one = load_model(lpath1)
+    with open(lpath2, 'rb') as f:
         stage_two = pickle.load(f)
     
     print("models loaded")
 
     return stage_one, stage_two
 
-def results(path):
-    stage_one, stage_two = load_models()
-    img = image.load_img(path)
+def results(path,model1,model2):
+    stage_one = model1
+    stage_two = model2
+    img = image.load_img(path,target_size = (256,256))
     print('image loaded')
     input_arr = np.array([img_to_array(img)])
     
@@ -73,6 +74,6 @@ def stage_two_pred(model, input_arr, plant):
     print(predicted_class)
     return predicted_class
 
-if __name__ == "__main__":
-    path = "data/valid/stage_two/corn/Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot/0a01cc10-3892-4311-9c48-0ac6ab3c7c43___RS_GLSp 9352_new30degFlipLR.JPG"
-    print(results(path))
+#if __name__ == "__main__":
+    #path = "../fastapi/static/uploads/1743851018.png"
+    #print(results(path))
