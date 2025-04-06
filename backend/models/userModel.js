@@ -18,7 +18,20 @@ const userSchema = new mongoose.Schema({
     },
     mobile: {
         type: String,
-        required: true
+        required: false
+    },
+    googleId: {
+        type: String,
+        sparse: true,
+        unique: true
+    },
+    avatar: {
+        type: String,
+        default: ''
+    },
+    isGoogleUser: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

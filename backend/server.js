@@ -6,7 +6,8 @@ import rateLimit from 'express-rate-limit';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
-import mlRoutes from './routes/mlRoutes.js';
+import socialRoutes from './routes/socialRoutes.js';
+import shopRoutes from './routes/shopRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -19,8 +20,16 @@ connectDB();
 // Rate limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    message: 'Too many requests from this IP, please try again after 15 minutes'
+    max: process.env.NODE_ENV === 'development' ? 1000 : 100, // Higher limit for development
+    message: {
+        status: 429,
+        message: 'Too many requests from this IP, please try again after 15 minutes'
+    },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    handler: (req, res, next, options) => {
+        res.status(options.statusCode).json(options.message);
+    }
 });
 
 // Apply rate limiting to auth routes
@@ -43,7 +52,8 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/ml', mlRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/shop', shopRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {

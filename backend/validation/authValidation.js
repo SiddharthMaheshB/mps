@@ -13,12 +13,11 @@ export const registerSchema = z.object({
         .max(50, 'Password is too long')
         .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
         .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .regex(/[0-9]/, 'Password must contain at least one number')
-        .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+        .regex(/[0-9]/, 'Password must contain at least one number'),
     mobile: z.string()
-        .min(10, 'Invalid mobile number')
-        .max(15, 'Invalid mobile number')
-        .regex(/^\+?[1-9]\d{9,14}$/, 'Invalid mobile number format')
+        .min(10, 'Mobile number must be at least 10 digits')
+        .max(15, 'Mobile number cannot exceed 15 digits')
+        .optional()
 });
 
 export const loginSchema = z.object({
