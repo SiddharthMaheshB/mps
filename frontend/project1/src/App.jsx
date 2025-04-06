@@ -183,8 +183,8 @@ function App() {
               />
             }
           />
-    <Route path="shop" element={<EcommerceLayout login={loginb} />}>
-      <Route index element={<Shop login={loginb} />} />
+    <Route path="shop" element={<EcommerceLayout login={isLoggedIn} />}>
+      <Route index element={<Shop login={isLoggedIn} />} />
       <Route path="product/:productId" element={<ProductDetail />} />
       <Route path="cart" element={<Cart />} />
       <Route path="search" element={<SearchResults />} />
