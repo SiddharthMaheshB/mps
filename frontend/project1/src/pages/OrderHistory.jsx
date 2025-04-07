@@ -5,7 +5,7 @@ import { useShop } from '../context/ShopContext';
 import './OrderHistory.css';
 
 const OrderHistory = () => {
-  const { fetchOrders, orderLoading, orders: contextOrders, clearAllOrders, showNotification } = useShop();
+  const { fetchOrders, orderLoading, orders: contextOrders, clearAllOrders, hardReset, showNotification } = useShop();
   const [orders, setOrders] = useState([]);
   const [expandedOrders, setExpandedOrders] = useState({});
   const [loading, setLoading] = useState(true);
@@ -23,30 +23,65 @@ const OrderHistory = () => {
       }
     }
   };
+  
+  // Handler for hard reset (completely removes all order data)
+  const handleHardReset = () => {
+    // Show confirmation dialog with stronger warning
+    if (window.confirm("WARNING: This will permanently remove ALL orders data for ALL users. This cannot be undone. Are you absolutely sure?")) {
+      // Ask for double confirmation
+      if (window.confirm("FINAL WARNING: This is a drastic action that affects all users. Press OK to confirm.")) {
+        const success = hardReset();
+        if (success) {
+          setOrders([]);
+          showNotification("Order data has been completely reset");
+        } else {
+          showNotification("Failed to reset data. Please try again.");
+        }
+      }
+    }
+  };
 
   // First, check if we already have orders in localStorage
   useEffect(() => {
     const getInitialOrders = () => {
       try {
+        // Get current user ID
+        const currentUserId = localStorage.getItem('userId');
+        if (!currentUserId) {
+          console.error('No userId found when loading order history');
+          setOrders([]);
+          setLoading(false);
+          return;
+        }
+        
         // Check for dummy orders in localStorage first for immediate display
         const storedOrders = localStorage.getItem('dummyOrders');
         if (storedOrders) {
           const parsedOrders = JSON.parse(storedOrders);
           if (Array.isArray(parsedOrders) && parsedOrders.length > 0) {
-            console.log('Using stored dummy orders for immediate display');
-            setOrders(parsedOrders);
+            // Filter to get only current user's orders
+            const userOrders = parsedOrders.filter(order => order.userId === currentUserId);
             
-            // Automatically expand the most recent order
-            if (parsedOrders.length > 0) {
+            console.log(`Found ${userOrders.length} orders for user ${currentUserId} (out of ${parsedOrders.length} total)`);
+            
+            if (userOrders.length > 0) {
+              // Sort orders by date (newest first)
+              const sortedOrders = userOrders.sort((a, b) => 
+                new Date(b.createdAt) - new Date(a.createdAt)
+              );
+              
+              setOrders(sortedOrders);
+              
+              // Automatically expand the most recent order
               setExpandedOrders({
-                [parsedOrders[0]._id]: true
+                [sortedOrders[0]._id]: true
               });
+              
+              setLoading(false);
+              // Still fetch from API but we already have data to show
+              fetchOrdersFromAPI(false);
+              return;
             }
-            
-            setLoading(false);
-            // Still fetch from API but we already have data to show
-            fetchOrdersFromAPI(false);
-            return;
           }
         }
         
@@ -68,13 +103,28 @@ const OrderHistory = () => {
     }
     
     try {
+      // Get current user ID
+      const currentUserId = localStorage.getItem('userId');
+      if (!currentUserId) {
+        console.error('No userId found when fetching orders from API');
+        setOrders([]);
+        setLoading(false);
+        return;
+      }
+      
       const fetchedOrders = await fetchOrders();
-      setOrders(fetchedOrders);
+      
+      // Filter to get only current user's orders
+      const userOrders = fetchedOrders.filter(order => order.userId === currentUserId);
+      
+      console.log(`Filtered ${userOrders.length} orders for user ${currentUserId} (out of ${fetchedOrders.length} total)`);
+      
+      setOrders(userOrders);
       
       // Automatically expand the most recent order if none are expanded yet
-      if (fetchedOrders.length > 0 && Object.keys(expandedOrders).length === 0) {
+      if (userOrders.length > 0 && Object.keys(expandedOrders).length === 0) {
         setExpandedOrders({
-          [fetchedOrders[0]._id]: true
+          [userOrders[0]._id]: true
         });
       }
     } catch (error) {
@@ -169,15 +219,17 @@ const OrderHistory = () => {
       <div className="orders-container">
         <div className="order-header-container">
           <h2 className="cart-title">Order History</h2>
-          {orders.length > 0 && (
-            <button 
-              className="clear-orders-btn" 
-              onClick={handleClearAllOrders}
-              title="Remove all orders from history"
-            >
-              Clear All Orders
-            </button>
-          )}
+          <div className="order-actions">
+            {orders.length > 0 && (
+              <button 
+                className="clear-orders-btn" 
+                onClick={handleClearAllOrders}
+                title="Remove all orders from history"
+              >
+                Clear My Orders
+              </button>
+            )}
+          </div>
         </div>
         
         {orders.map(order => (

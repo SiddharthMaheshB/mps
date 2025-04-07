@@ -19,6 +19,7 @@ export const ShopProvider = ({ children }) => {
     try {
       setOrderLoading(true);
       const token = localStorage.getItem('token');
+      const currentUserId = localStorage.getItem('userId');
       
       // Always load cached orders first for immediate UI response
       const existingOrders = getExistingDummyOrders();
@@ -53,8 +54,21 @@ export const ShopProvider = ({ children }) => {
         
         console.log('Orders fetched from API:', response.data.length);
         
-        // Combine server orders with dummy orders
-        const allOrders = [...response.data, ...existingOrders];
+        // Ensure server orders have the current user ID if not already set
+        const serverOrders = response.data.map(order => ({
+          ...order,
+          userId: order.userId || currentUserId || 'anonymous'
+        }));
+        
+        // Filter server orders by current user
+        const filteredServerOrders = serverOrders.filter(order => 
+          order.userId === currentUserId
+        );
+        
+        console.log(`Filtered ${filteredServerOrders.length} server orders for user ${currentUserId}`);
+        
+        // Combine filtered server orders with dummy orders
+        const allOrders = [...filteredServerOrders, ...existingOrders];
         
         // Sort by date (newest first)
         const sortedOrders = allOrders.sort((a, b) => 
@@ -100,13 +114,22 @@ export const ShopProvider = ({ children }) => {
   
   // Get existing dummy orders without creating new ones
   const getExistingDummyOrders = () => {
+    // Get current user ID
+    const currentUserId = localStorage.getItem('userId');
+    
     // Check if we have dummy orders in local storage
     const storedDummyOrders = localStorage.getItem('dummyOrders');
     if (storedDummyOrders) {
       try {
-        const orders = JSON.parse(storedDummyOrders);
-        if (Array.isArray(orders)) {
-          return orders;
+        const allOrders = JSON.parse(storedDummyOrders);
+        if (Array.isArray(allOrders)) {
+          // Filter orders for the current user only
+          const userOrders = currentUserId 
+            ? allOrders.filter(order => order.userId === currentUserId)
+            : [];
+          
+          console.log(`Found ${userOrders.length} orders for user ${currentUserId} (out of ${allOrders.length} total)`);
+          return userOrders;
         }
       } catch (e) {
         console.error('Error parsing stored dummy orders:', e);
@@ -198,9 +221,116 @@ export const ShopProvider = ({ children }) => {
     setNotification(null);
   };
   
+  // Add a function to clean up orders by removing any without a userId
+  const cleanupOrdersWithoutUserId = () => {
+    try {
+      console.log('Cleaning up orders without userId...');
+      const storedOrders = localStorage.getItem('dummyOrders');
+      if (!storedOrders) return;
+      
+      const orders = JSON.parse(storedOrders);
+      if (!Array.isArray(orders)) return;
+      
+      // Filter out orders without a userId
+      const validOrders = orders.filter(order => order.userId);
+      
+      if (validOrders.length !== orders.length) {
+        console.log(`Removed ${orders.length - validOrders.length} orders without userId`);
+        localStorage.setItem('dummyOrders', JSON.stringify(validOrders));
+        
+        // Refresh orders in UI
+        const currentUserId = localStorage.getItem('userId');
+        if (currentUserId) {
+          const userOrders = validOrders.filter(order => order.userId === currentUserId);
+          setOrders(userOrders);
+        }
+      } else {
+        console.log('No orders without userId found');
+      }
+    } catch (error) {
+      console.error('Error cleaning up orders:', error);
+    }
+  };
+  
   // Ensure cart data is valid on mount
   useEffect(() => {
     try {
+      // Update existing orders with userId if missing
+      const updateExistingOrdersWithUserId = () => {
+        console.log('Running order userId update...');
+        const storedOrders = localStorage.getItem('dummyOrders');
+        if (storedOrders) {
+          try {
+            const orders = JSON.parse(storedOrders);
+            const currentUserId = localStorage.getItem('userId');
+            
+            if (Array.isArray(orders) && orders.length > 0 && currentUserId) {
+              console.log(`Found ${orders.length} orders in storage, checking for userId updates`);
+              
+              // Add userId to all orders from the current user
+              let updatedOrders = [...orders];
+              let updatesMade = false;
+              
+              updatedOrders = updatedOrders.map(order => {
+                // For orders without a userId, assign the current userId
+                if (!order.userId) {
+                  console.log(`Adding userId ${currentUserId} to order ${order._id}`);
+                  updatesMade = true;
+                  return {
+                    ...order,
+                    userId: currentUserId
+                  };
+                }
+                return order;
+              });
+              
+              if (updatesMade) {
+                // Save updated orders
+                localStorage.setItem('dummyOrders', JSON.stringify(updatedOrders));
+                console.log(`Updated ${updatedOrders.length} orders with user ID`);
+                
+                // Force a refresh to apply the changes
+                const userOrders = updatedOrders.filter(order => order.userId === currentUserId);
+                setOrders(userOrders);
+                
+                // Dispatch the orderUpdated event
+                setTimeout(() => {
+                  window.dispatchEvent(new Event('orderUpdated'));
+                }, 100);
+              } else {
+                console.log('No order updates needed, all orders have userIds');
+              }
+            }
+          } catch (e) {
+            console.error('Error updating orders with userId:', e);
+          }
+        }
+      };
+      
+      // Run the update function immediately
+      updateExistingOrdersWithUserId();
+      
+      // Remove any orders without userId
+      cleanupOrdersWithoutUserId();
+      
+      // Force refresh orders for current user
+      const currentUserId = localStorage.getItem('userId');
+      if (currentUserId) {
+        const storedOrders = localStorage.getItem('dummyOrders');
+        if (storedOrders) {
+          try {
+            const allOrders = JSON.parse(storedOrders);
+            if (Array.isArray(allOrders)) {
+              const userOrders = allOrders.filter(order => order.userId === currentUserId);
+              console.log(`Setting initial orders - found ${userOrders.length} orders for user ${currentUserId}`);
+              setOrders(userOrders);
+            }
+          } catch (e) {
+            console.error('Error loading initial orders:', e);
+          }
+        }
+      }
+      
       // Don't clear dummy orders anymore as we want orders to persist
       // localStorage.removeItem('dummyOrders');
       
@@ -303,6 +433,12 @@ export const ShopProvider = ({ children }) => {
         return null;
       }
       
+      // Get current user ID
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        console.error('No userId found when creating order');
+      }
+      
       // Create a new dummy order
       const now = new Date();
       
@@ -346,7 +482,8 @@ export const ShopProvider = ({ children }) => {
         updatedAt: now.toISOString(),
         totalAmount: totalAmount || 0,
         items: enhancedItems || [],
-        status: 'Processing'
+        status: 'Processing',
+        userId: userId || 'anonymous' // Add userId to order
       };
       
       // Get existing dummy orders
@@ -369,8 +506,10 @@ export const ShopProvider = ({ children }) => {
       // Store back in localStorage
       localStorage.setItem('dummyOrders', JSON.stringify(dummyOrders));
       
-      // Update the state
-      setOrders(dummyOrders);
+      // Update the state - but only with current user's orders
+      const currentUserId = localStorage.getItem('userId');
+      const userOrders = dummyOrders.filter(order => order.userId === currentUserId);
+      setOrders(userOrders);
       
       console.log('New dummy order created:', newOrder._id);
       
@@ -387,16 +526,34 @@ export const ShopProvider = ({ children }) => {
     }
   };
   
-  // Add function to clear all orders
+  // Add function to clear all orders for the current user
   const clearAllOrders = () => {
     try {
-      // Remove orders from localStorage
-      localStorage.removeItem('dummyOrders');
+      const currentUserId = localStorage.getItem('userId');
+      if (!currentUserId) {
+        console.error('No userId found when clearing orders');
+        return false;
+      }
+      
+      // Get all existing orders
+      const storedOrders = localStorage.getItem('dummyOrders');
+      if (storedOrders) {
+        const allOrders = JSON.parse(storedOrders);
+        if (Array.isArray(allOrders)) {
+          // Keep orders from other users, remove only current user's orders
+          const otherUsersOrders = allOrders.filter(order => order.userId !== currentUserId);
+          
+          // Save the filtered orders back to localStorage
+          localStorage.setItem('dummyOrders', JSON.stringify(otherUsersOrders));
+          
+          console.log(`Cleared orders for user ${currentUserId}, kept ${otherUsersOrders.length} orders from other users`);
+        }
+      }
       
       // Update state to empty array
       setOrders([]);
       
-      console.log('All orders cleared successfully');
+      console.log('All orders cleared successfully for current user');
       
       // Dispatch the orderUpdated event to notify other components
       setTimeout(() => {
@@ -407,6 +564,27 @@ export const ShopProvider = ({ children }) => {
       return true;
     } catch (error) {
       console.error('Error clearing orders:', error);
+      return false;
+    }
+  };
+  
+  // Complete reset function for emergency use 
+  const hardReset = () => {
+    try {
+      console.log('Performing hard reset of all orders data');
+      localStorage.removeItem('dummyOrders');
+      localStorage.setItem('dummyOrders', '[]');
+      setOrders([]);
+      
+      // Dispatch the orderUpdated event
+      setTimeout(() => {
+        window.dispatchEvent(new Event('orderUpdated'));
+        console.log('Orders hard reset completed');
+      }, 100);
+      
+      return true;
+    } catch (error) {
+      console.error('Error performing hard reset:', error);
       return false;
     }
   };
@@ -422,7 +600,8 @@ export const ShopProvider = ({ children }) => {
         fetchOrders,
         getOrder,
         addDummyOrder,
-        clearAllOrders
+        clearAllOrders,
+        hardReset
       }}
     >
       {children}

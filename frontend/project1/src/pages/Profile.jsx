@@ -51,7 +51,7 @@ export default function Profile({ login, setLogin, user, setUser }) {
   const navigate = useNavigate();
   
   // Get the shop context
-  const { fetchOrders: fetchShopOrders } = useShop();
+  const { fetchOrders: fetchShopOrders, hardReset } = useShop();
   
   // Create a ref for the file input
   const fileInputRef = React.useRef(null);
@@ -203,19 +203,33 @@ export default function Profile({ login, setLogin, user, setUser }) {
   const fetchUserOrders = async () => {
     setOrdersLoading(true);
     try {
+      // Get current user ID
+      const currentUserId = localStorage.getItem('userId');
+      if (!currentUserId) {
+        console.error('No userId found when fetching orders in Profile');
+        setOrders([]);
+        setOrdersLoading(false);
+        return;
+      }
+      
       // Use the fetchOrders function from ShopContext
       const shopOrders = await fetchShopOrders();
       
       // If ShopContext returned orders, use them
       if (shopOrders && Array.isArray(shopOrders)) {
+        // Filter orders for the current user only
+        const userOrders = shopOrders.filter(order => 
+          order.userId === currentUserId
+        );
+        
         // Sort orders by date (newest first)
-        const sortedOrders = shopOrders.sort((a, b) => 
+        const sortedOrders = userOrders.sort((a, b) => 
           new Date(b.createdAt) - new Date(a.createdAt)
         );
         
         // Store all orders but we'll only display the most recent ones
         setOrders(sortedOrders);
-        console.log(`Fetched and sorted ${sortedOrders.length} orders, displaying up to 10 most recent`);
+        console.log(`Fetched and sorted ${sortedOrders.length} orders for user ${currentUserId}`);
       } else {
         // Fallback: try to get them directly from localStorage
         try {
@@ -223,12 +237,18 @@ export default function Profile({ login, setLogin, user, setUser }) {
           if (storedOrders) {
             const parsedOrders = JSON.parse(storedOrders);
             if (Array.isArray(parsedOrders)) {
+              // Filter orders by current user
+              const userOrders = parsedOrders.filter(order => 
+                order.userId === currentUserId
+              );
+              
               // Sort by date (newest first)
-              const sortedOrders = parsedOrders.sort((a, b) => 
+              const sortedOrders = userOrders.sort((a, b) => 
                 new Date(b.createdAt) - new Date(a.createdAt)
               );
+              
               setOrders(sortedOrders);
-              console.log(`Using ${sortedOrders.length} localStorage orders, displaying up to 10 most recent`);
+              console.log(`Using ${sortedOrders.length} localStorage orders for user ${currentUserId}`);
             }
           }
         } catch (err) {
@@ -947,6 +967,23 @@ export default function Profile({ login, setLogin, user, setUser }) {
     });
   };
 
+  // Handler for hard reset (completely removes all order data)
+  const handleHardReset = () => {
+    // Show confirmation dialog with stronger warning
+    if (window.confirm("WARNING: This will permanently remove ALL orders data for ALL users. This cannot be undone. Are you absolutely sure?")) {
+      // Ask for double confirmation
+      if (window.confirm("FINAL WARNING: This is a drastic action that affects all users. Press OK to confirm.")) {
+        const success = hardReset();
+        if (success) {
+          setOrders([]);
+          alert("Order data has been completely reset");
+        } else {
+          alert("Failed to reset data. Please try again.");
+        }
+      }
+    }
+  };
+
   // Show loading state if loading
   if (loading) {
     return (
@@ -1396,6 +1433,31 @@ export default function Profile({ login, setLogin, user, setUser }) {
                   />
                 </div>
                 <button className="save-btn" onClick={handlePasswordUpdate}>Update Password</button>
+              </div>
+              
+              <div className="settings-card">
+                <h4>Emergency Tools</h4>
+                <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>
+                  Use these tools only if you're experiencing persistent issues with the application. 
+                  The following actions affect data for all users and cannot be undone.
+                </p>
+                <button 
+                  className="hard-reset-btn" 
+                  onClick={handleHardReset}
+                  style={{
+                    background: '#d9534f',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 15px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    marginTop: '10px',
+                    width: '100%',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Reset All Order Data
+                </button>
               </div>
             </div>
           )}

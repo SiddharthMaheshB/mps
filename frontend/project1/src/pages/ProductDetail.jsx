@@ -4,6 +4,35 @@ import axios from 'axios';
 import './ProductDetail.css';
 import { useShop } from '../context/ShopContext';
 
+// Import product images
+import carrotImage from './product_images/Fresh Carrots.jpeg';
+import tomatoImage from './product_images/Tamatoes.jpeg';
+import appleImage from './product_images/Organic Apples.jpeg';
+import bananaImage from './product_images/Banana.jpeg';
+import milkImage from './product_images/Daily Milk.jpeg';
+import cheeseImage from './product_images/Cheese.jpeg';
+
+// Product image mapping
+const productImageMap = {
+  'Fresh Carrots': carrotImage,
+  'Tomatoes': tomatoImage,
+  'Organic Apples': appleImage,
+  'Bananas': bananaImage,
+  'Dairy Milk': milkImage,
+  'Cheese': cheeseImage
+};
+
+// Helper function to get product image
+const getProductImage = (product) => {
+  // Use the image from the map if available
+  if (productImageMap[product.name]) {
+    return productImageMap[product.name];
+  }
+  
+  // Fallback to the original image path
+  return product.image.startsWith('http') ? product.image : `/${product.image}`;
+};
+
 const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -226,7 +255,7 @@ const ProductDetail = () => {
     <div className="product-detail-container">
       <div className="product-image-container">
         <img 
-          src={product.image.startsWith('http') ? product.image : `/${product.image}`} 
+          src={getProductImage(product)} 
           alt={product.name} 
           className="product-detail-image"
           onError={(e) => {
