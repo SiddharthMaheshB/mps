@@ -18,7 +18,7 @@ export default function FarmScene({login}) {
     const navigate = useNavigate();
 
     if(!login){
-        navigate('/login');
+        navigate('/');
         return null;
     }
 
@@ -446,10 +446,53 @@ export default function FarmScene({login}) {
             if (response.data.success) {
                 console.log(`Successfully followed user: ${farmerToFollow.username}`, response.data);
                 
-                // For now, only remove from the suggestions list
+                // Remove the followed user from allFarmers
                 setAllFarmers(prevFarmers => prevFarmers.filter(farmer => farmer._id !== userId));
                 
-                // After successful follow, refresh the data to ensure UI is consistent
+                // Immediately get fresh suggestion list to maintain 10 users
+                try {
+                    const suggestionsResponse = await axios.get('http://localhost:5000/api/social/friends/suggestions', config);
+                    
+                    if (suggestionsResponse.data && suggestionsResponse.data.length > 0) {
+                        console.log(`Fetched ${suggestionsResponse.data.length} new user suggestions after follow action`);
+                        
+                        // Create a set of connection IDs for faster lookup, including the just-followed user
+                        const connectionIdSet = new Set([userId]);
+                        
+                        // Add all current connections to the set
+                        connections.forEach(conn => {
+                            if (conn.id) connectionIdSet.add(conn.id);
+                            if (conn._id) connectionIdSet.add(conn._id);
+                        });
+                        
+                        // Add the current user ID
+                        const currentUserId = localStorage.getItem('userId');
+                        if (currentUserId) connectionIdSet.add(currentUserId);
+                        
+                        // Filter suggestions to remove any users already connected with
+                        const filteredFarmers = suggestionsResponse.data.filter(farmer => 
+                            !connectionIdSet.has(farmer._id) && 
+                            !connectionIdSet.has(farmer._id.toString())
+                        );
+                        
+                        // Combine the new suggestions with existing ones (excluding followed user)
+                        const currentFarmers = allFarmers.filter(farmer => farmer._id !== userId);
+                        
+                        // Ensure we don't have duplicates
+                        const existingIds = new Set(currentFarmers.map(farmer => farmer._id));
+                        const newUniqueFarmers = filteredFarmers.filter(farmer => !existingIds.has(farmer._id));
+                        
+                        // Combine and limit to 10
+                        const combinedFarmers = [...currentFarmers, ...newUniqueFarmers].slice(0, 10);
+                        
+                        console.log(`Updated suggestions list with ${combinedFarmers.length} users`);
+                        setAllFarmers(combinedFarmers);
+                    }
+                } catch (suggestionsErr) {
+                    console.error('Error fetching new suggestions after follow:', suggestionsErr);
+                }
+                
+                // After successful follow, also update the followers/following data
                 await refreshNetworkData();
                 
             } else {

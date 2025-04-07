@@ -403,7 +403,7 @@ const getFriendSuggestions = asyncHandler(async (req, res) => {
             _id: { $nin: Array.from(existingFriendIds) }
         })
         .select('_id username avatar')
-        .limit(10);
+        .limit(30);
         
         console.log(`Returning ${suggestions.length} user suggestions`);
         
@@ -536,12 +536,19 @@ const getFriends = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get user's followers
-// @route   GET /api/social/followers
+// @route   GET /api/social/followers or GET /api/social/followers/:userId
 // @access  Private
 const getFollowers = asyncHandler(async (req, res) => {
     try {
-        // Find followers where the current user is being followed
-        const userFollowers = await Follow.find({ following: req.user._id })
+        let userId = req.user._id;
+        
+        // Check if a specific user ID was provided in the URL
+        if (req.params.userId) {
+            userId = req.params.userId;
+        }
+        
+        // Find followers where the specified user is being followed
+        const userFollowers = await Follow.find({ following: userId })
             .populate('follower', 'username avatar _id')
             .sort({ createdAt: -1 });
         
@@ -566,12 +573,19 @@ const getFollowers = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get users that the current user is following
-// @route   GET /api/social/following
+// @route   GET /api/social/following or GET /api/social/following/:userId
 // @access  Private
 const getFollowing = asyncHandler(async (req, res) => {
     try {
-        // Find users that the current user is following
-        const userFollowing = await Follow.find({ follower: req.user._id })
+        let userId = req.user._id;
+        
+        // Check if a specific user ID was provided in the URL
+        if (req.params.userId) {
+            userId = req.params.userId;
+        }
+        
+        // Find users that the specified user is following
+        const userFollowing = await Follow.find({ follower: userId })
             .populate('following', 'username avatar _id')
             .sort({ createdAt: -1 });
         
