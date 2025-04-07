@@ -42,10 +42,10 @@ print(f'Model Accuracy: {accuracy * 100:.2f}%')
 joblib.dump(model, "fertilizer_predictor.pkl")
 joblib.dump(label_encoders, "label_encoders.pkl")
 
-def predict_fertilizer(district, soil_color, nitrogen, phosphorus, potassium, pH, rainfall, temperature, crop):
+def predict_fertilizer(district, soil_color, nitrogen, phosphorus, potassium, pH, rainfall, temperature, crop,model,label_encoders):
     """Predicts the fertilizer based on soil analysis and crop."""
-    model = joblib.load("fertilizer_predictor.pkl")
-    label_encoders = joblib.load("label_encoders.pkl")
+    #model = joblib.load("fertilizer_predictor.pkl")
+    #label_encoders = joblib.load("label_encoders.pkl")
     
     # Encode categorical inputs
     district_encoded = label_encoders['District_Name'].transform([district])[0]

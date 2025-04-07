@@ -7,10 +7,12 @@ import os
 import time
 import sys
 import joblib
-
+from test import get_crop_remedy
+from fert import get_fertiliser_query
 # Include parent dir for model import
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from diseasedetection.main import results,load_models  # Your disease detection function
+from diseasedetection.main import results,load_models
+from fertilizer.predictor import predict_fertilizer  # Your disease detection function
 
 app = FastAPI()
 
@@ -60,12 +62,13 @@ def load_cached_models():
 
     return app.state.model1, app.state.model2
 
-model1,model2  = load_cached_models()  
 
 @app.post("/api/analysis")
 async def analyze(request: AnalysisRequest):
     try:
         # Extract and decode base64 image
+        model1,model2  = load_cached_models()  
+
         base64_data = request.imageData.split(",")[-1]
         image_bytes = base64.b64decode(base64_data)
 
@@ -94,6 +97,187 @@ async def analyze(request: AnalysisRequest):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
-@app.get("/api/recommendation/{disease}")
-def get_recommendations(disease):
-    return recommendations[disease]
+
+
+@app.get("/api/recommendation/{crop}/{disease}")
+async def get_recommendation(crop: str, disease: str):
+    key = f"{crop}_{disease}".lower().replace(" ", "_")
+    response =  get_crop_remedy(key)
+    return response
+
+
+
+def load_fertilizer_model():
+    if not hasattr(app.state, "fert_model"):
+        print("📦 Loading fertilizer model into cache...")
+        app.state.fert_model = joblib.load("../fertilizer/fertilizer_predictor.pkl")
+        app.state.label_encoders = joblib.load("../fertilizer/label_encoders.pkl")
+    return app.state.fert_model, app.state.label_encoders
+
+class FertilizerInput(BaseModel):
+    soil_color: str
+    nitrogen: float
+    phosphorus: float
+    potassium: float
+    ph: float
+    rainfall: float
+    temperature: float
+    crop: str
+
+@app.post("/api/fertiliser/manual")
+async def get_fertilizer_manual(data: FertilizerInput):
+    try:
+        model, encoders = load_fertilizer_model()
+        fertilizer = predict_fertilizer("Kolhapur", data.soil_color, data.nitrogen, data.phosphorus, data.potassium, data.ph, data.rainfall, data.temperature, data.crop ,model,encoders)
+        return {"recommended_fertilizer": f"{fertilizer}","nitrogen":data.nitrogen,"phosphorus": data.phosphorus,"potassium": data.potassium}
+
+    except Exception as e:
+        print(str(e))
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+from fastapi import UploadFile, File
+import pandas as pd
+import numpy as np
+import io
+
+@app.post("/api/fertiliser/upload")
+async def get_fertilizer_from_file(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        df = pd.read_csv(io.BytesIO(contents))
+
+        model, label_encoders = load_fertilizer_model()
+        recommendations = []
+
+        for _, row in df.iterrows():
+            try:
+                fertilizer = predict_fertilizer(
+                    district=row["district"],
+                    soil_color=row["soil_color"],
+                    nitrogen=row["nitrogen"],
+                    phosphorus=row["phosphorus"],
+                    potassium=row["potassium"],
+                    pH=row["pH"],
+                    rainfall=row["rainfall"],
+                    temperature=row["temperature"],
+                    crop=row["crop"],
+                    model=model,
+                    label_encoders=label_encoders
+                )
+
+                recommendations.append({
+                    "row": row.to_dict(),
+                    "recommended_fertilizer": f"{fertilizer}"
+                })
+            except Exception as inner_e:
+                recommendations.append({
+                    "row": row.to_dict(),
+                    "error": f"❌ Error: {str(inner_e)}"
+                })
+
+        return {"recommendations": recommendations,"nitrogen":row["nitrogen"],"phosphorus":row["phosphorus"], "potassium":row["potassium"]}
+
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+class FertilizerRecoRequest(BaseModel):
+    fertilizer: str
+    nitrogen: float
+    phosphorus: float
+    potassium: float
+
+@app.post("/api/fertiliser/recommendation")
+async def fertiliser_recommendations(data: FertilizerRecoRequest):
+    response = get_fertiliser_query(data.fertilizer,data.nitrogen,data.phosphorus,data.potassium)
+    response["npk_values"] = {
+        "n": data.nitrogen,
+        "p": data.phosphorus,
+        "k": data.potassium
+    }
+    print(response)
+    return response
+
+from crop.main import CropRecommendationLSTM
+def load_crop_model():
+    if not hasattr(app.state, "crop_model"):
+        print("📦 Loading crop recommendation model into cache...")
+        app.state.crop_model_instance = CropRecommendationLSTM("crop/crop_data.csv")
+        app.state.crop_model_instance.load_model("crop/saved_models/crop_recommendation_model.h5")
+    return app.state.crop_model_instance
+
+# Manual Input for Crop Prediction
+class CropInput(BaseModel):
+    nitrogen: float
+    phosphorus: float
+    potassium: float
+    temperature: float
+    humidity: float
+    ph: float
+    rainfall: float
+
+@app.post("/api/croppred/manual")
+async def get_crop_manual(data: CropInput):
+    try:
+        crop_model = load_crop_model()
+        input_array = np.array([[data.nitrogen, data.phosphorus, data.potassium,
+                                 data.temperature, data.humidity, data.ph, data.rainfall]])
+        crop = crop_model.predict_crop(input_array)
+        soilHealth  = round((data.nitrogen+data.phosphorus+data.potassium)/3,2)
+        return {"recommended_crop": crop,"soilHealth":soilHealth,"moistureLevel":data.humidity,"phLevel":data.ph,"temperature":data.temperature}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+# CSV Upload for Batch Crop Prediction
+@app.post("/api/croppred/upload")
+async def get_crop_from_file(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        df = pd.read_csv(io.BytesIO(contents))
+
+        crop_model = load_crop_model()
+        predictions = []
+
+        for _, row in df.iterrows():
+            try:
+                input_array = np.array([[row["nitrogen"], row["phosphorus"], row["potassium"],
+                                         row["temperature"], row["humidity"], row["ph"], row["rainfall"]]])
+                crop = crop_model.predict_crop(input_array)
+                predictions.append({
+                    "row": row.to_dict(),
+                    "recommended_crop": crop
+                })
+            except Exception as inner_e:
+                predictions.append({
+                    "row": row.to_dict(),
+                    "error": f"❌ Error: {str(inner_e)}"
+                })
+
+        return {"predictions": predictions}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+class CropRecoRequest(BaseModel):
+    recommended_crop: str
+    moisture: float
+    ph: float
+    temperature: float
+
+from CropRec import get_crop_recommendation_query
+@app.post("/api/croppred/recommendation")
+async def crop_remedy(data: CropRecoRequest):
+    try:
+        response = get_crop_recommendation_query(data.recommended_crop, data.moisture, data.ph, data.temperature)
+
+        response["parameters_used"] = {
+            "recommended_crop": data.recommended_crop,
+            "moisture": data.moisture,
+            "ph": data.ph,
+            "temperature": data.temperature
+        }
+
+        return response
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})

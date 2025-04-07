@@ -54,7 +54,7 @@ function Navbar({ login, user, setLogin, setUser, ToFooter, ToFeatures }) {
   if (login)
     return (
       <>
-        <nav style={styles.navbar} className="main-navbar">
+        <nav style={styles.navbar}>
           <div style={styles.leftGroup}>
             <a href="/" aria-label="Home" style={{textDecoration:"none",color:"white"}}>
               <Logo style={styles.logo} />
@@ -106,7 +106,7 @@ const styles = {
     top: 0,
     left: 0,
     width: "100%",
-    background: "#7A7A7A",
+    background:  "rgba(0, 0, 0, 0.5)",
     color: "white",
     display: "flex",
     justifyContent: "space-between",

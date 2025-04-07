@@ -173,7 +173,7 @@ const EcommerceLayout = ({ login }) => {
             <div className="ecom-content">
                 <Outlet />
             </div>
-            <div className="ecom-footer">
+            <div className="ecom-footer" style={{textAlign:"center",alignItems:"center"}}>
                 <p>© 2023 Farm Shop. All rights reserved.</p>
             </div>
         </div>

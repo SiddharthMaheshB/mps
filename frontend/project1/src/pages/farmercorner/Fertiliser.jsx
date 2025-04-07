@@ -50,32 +50,63 @@ export default function Fertiliser({ login }) {
     ],
   };
 
-  const [analysisData, setAnalysisData] = useState(fallbackData);
-  const [recommendationData, setRecommendationData] = useState(fallbackReco);
+  const [analysisData, setAnalysisData] = useState(null);
+  const [recommendationData, setRecommendationData] = useState(null);
 
   useEffect(() => {
+    const isValid = analysisData?.recommended_fertilizer &&
+                    analysisData?.nitrogen !== undefined &&
+                    analysisData?.phosphorus !== undefined &&
+                    analysisData?.potassium !== undefined;
+  
+    if (!isValid) return;
+  
     const fetchData = async () => {
       try {
-        const fertRes = await fetch("/api/analysis");
-        const fertrec = await fetch("/api/recommendation");
-
-        const fertResJson = await fertRes.json();
+        const fertrec = await fetch(`http://localhost:8000/api/fertiliser/recommendation`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fertilizer: analysisData.recommended_fertilizer,
+            nitrogen: parseFloat(analysisData.nitrogen),
+            phosphorus: parseFloat(analysisData.phosphorus),
+            potassium: parseFloat(analysisData.potassium),
+          }),
+        });
+  
         const recoJson = await fertrec.json();
-
-        if (fertResJson && fertResJson.soilHealth) {
-          setAnalysisData(fertResJson);
-        }
-
         if (recoJson && Object.keys(recoJson).length > 0) {
           setRecommendationData(recoJson);
         }
       } catch (error) {
-        console.error("API fetch failed, using fallback data.");
+        console.error("API fetch failed, using fallback data.", error);
       }
     };
-
+  
     fetchData();
-  }, []);
+  }, [analysisData]);
+  
+  
+
+  const finalAnalysis = analysisData && analysisData.nitrogen !== undefined
+  ? {
+      ...analysisData,
+      soilHealth: (
+        (parseFloat(analysisData.nitrogen || 0) +
+         parseFloat(analysisData.phosphorus || 0) +
+         parseFloat(analysisData.potassium || 0)) / 3
+      ).toFixed(2),
+      npk: {
+        n: analysisData.nitrogen,
+        p: analysisData.phosphorus,
+        k: analysisData.potassium,
+      }
+    }
+  : fallbackData;
+
+  const finalReco = recommendationData|| fallbackReco
 
   if (!login) {
     return <h1>404 Not Found!!</h1>;
@@ -85,13 +116,13 @@ export default function Fertiliser({ login }) {
     <>
       <div className="section-container">
         <div className="section1">
-          <FileUploader />
+        <FileUploader onDetect={(data) => setAnalysisData({ ...data })} />
         </div>
         <div className="section2">
-          <FertilizerResults soilHealth={analysisData.soilHealth} npk={analysisData.npk} />
+          <FertilizerResults soilHealth={finalAnalysis.soilHealth} npk={finalAnalysis.npk} />
         </div>
         <div className="section3">
-          <FertilizerRec recommendations={recommendationData} />
+          <FertilizerRec recommendations={finalReco} />
         </div>
       </div>
       <br />

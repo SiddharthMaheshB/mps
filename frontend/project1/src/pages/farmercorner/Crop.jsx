@@ -27,7 +27,7 @@ const Recommendations = ({ bestCrops, recommendations, trendsData }) => {
     <div className="rec-container">
       <h4 className="inputheading">🌱 Best Crop Recommendations</h4>
       <div className="remedy-container">
-        <p><strong>Best Suited Crops:</strong> {bestCrops.join(", ")}</p>
+        <p><strong>Best Suited Crop:</strong> {bestCrops}</p>
       </div>
       <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)} className="Tabs">
         <TabList className="TabList">

@@ -4,31 +4,31 @@ import "./Tutorial.css";
 const tutorialsList = [
   {
     title: "How to Improve Soil Quality",
-    video: "tutorial-video.mp4",
+    video: "https://www.youtube.com/embed/YN7nUHkvxwo?si=XgdOvazrb0wZkc_N",
     description: "Best practices for maintaining and improving soil health.",
     category: "Soil Health",
   },
   {
     title: "Effective Pest Management",
-    video: "tutorial-video.mp4",
+    video: "https://www.youtube.com/embed/tnn4R0j3f-4?si=z7c_O_eWKk2XqNa7",
     description: "Learn how to control pests organically and safely.",
     category: "Pest Control",
   },
   {
     title: "Smart Irrigation Techniques",
-    video: "tutorial-video.mp4",
+    video:"https://www.youtube.com/embed/dxRY0Mpejgk",
     description: "Optimize water usage with smart irrigation.",
     category: "Irrigation",
   },
   {
     title: "Balanced Fertilization Tips",
-    video: "tutorial-video.mp4",
+    video: "https://www.youtube.com/embed/y9b2p69CxCk?si=FKXsvdevkUg4O-qT",
     description: "Guide to choosing and applying fertilizers effectively.",
     category: "Fertilization",
   },
   {
     title: "Using Modern Farm Equipment",
-    video: "tutorial-video.mp4",
+    video: "https://www.youtube.com/embed/1VNr2AyJ71w?si=CqAX-Oeaq2wutk-C",
     description: "Intro to handling and maintaining equipment.",
     category: "Equipment",
   },
@@ -62,7 +62,7 @@ export default function Tutorials({ login }) {
         <h2>Farmers' Learning Hub</h2>
         <input
           type="text"
-          className="search-bar"
+          className="tutorial-search-bar"
           placeholder="Search tutorials..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -90,10 +90,16 @@ export default function Tutorials({ login }) {
           filteredTutorials.map((tutorial, index) => (
             <div key={index} className="tutorial-content">
               <h2 className="tutorial-title">{tutorial.title}</h2>
-              <video className="tutorial-video" controls>
-                <source src={tutorial.video} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              <div className="video-wrapper">
+                <iframe
+                  className="tutorial-video"
+                  src={tutorial.video}
+                  title={tutorial.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
               <p>{tutorial.description}</p>
             </div>
           ))

@@ -5,4 +5,4 @@ myenv
 fastapi/__pycache__
 diseasedetection/weights
 diseasedetection/__pycache__
-
+fastapi/static
