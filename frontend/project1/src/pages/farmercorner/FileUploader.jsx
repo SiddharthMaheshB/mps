@@ -2,7 +2,8 @@ import { useState, useRef } from "react";
 import { FiUploadCloud } from "react-icons/fi";
 import { MdOutlineFilePresent } from "react-icons/md";
 
-const FileUploader = ({ onFileUpload }) => {
+const FileUploader = ({ onFileUpload,onDetect }) => {
+  const FASTAPI_URL = import.meta.env.VITE_FASTAPI_URL;
   const [inputfile, setFile] = useState(null);
   const [filename, setFilename] = useState("");
   const [isManualInput, setIsManualInput] = useState(false);
@@ -71,30 +72,69 @@ const FileUploader = ({ onFileUpload }) => {
     }));
   };
 
-  // 🧪 Simulate API call
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Soil Data:", formData);
-    alert("Fertilizer recommendation submitted!");
-    // You could reset the form if you like:
-    // setFormData({...});
+  
+    try {
+      const pl = JSON.stringify(formData)
+      console.log(pl)
+      const response = await fetch("http://localhost:8000/api/fertiliser/manual", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: pl,
+      });
+  
+      if (!response.ok) throw new Error("Manual submission failed");
+  
+      const data = await response.json();
+      console.log("✅ Fertilizer Recommendation from manual data:", data);
+  
+      alert("Fertilizer recommendation submitted successfully!");
+      onDetect(data);
+      if (onFileUpload) {
+        onFileUpload(data); // optional: send response to parent
+      }
+    } catch (error) {
+      console.error("❌ Error submitting manual data:", error);
+      alert("Failed to submit manual soil data.");
+    }
   };
+  
 
-  const handleFileSubmit = () => {
+  const handleFileSubmit = async () => {
     if (!inputfile) {
       alert("Please upload a file first.");
       return;
     }
   
-    // Simulate API call
-    console.log("Submitting uploaded file for recommendation:", filename);
-    alert("Fertilizer recommendation submitted based on uploaded file!");
+    try {
+      const blob = await fetch(inputfile).then(res => res.blob());
+      const formData = new FormData();
+      formData.append("file", blob, filename);
   
-    // Optionally: you can pass data to a parent component here or call a real API
-    if (onFileUpload) {
-      onFileUpload(inputfile); // already contains base64
+      const response = await fetch("http://localhost:8000/api/fertiliser/upload", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) throw new Error("File upload failed");
+  
+      const data = await response.json();
+      console.log("✅ Fertilizer Recommendation from uploaded file:", data);
+  
+      alert("Fertilizer recommendation submitted from uploaded file!");
+      onDetect(data);
+      if (onFileUpload) {
+        onFileUpload(data); // optional: send response to parent
+      }
+    } catch (error) {
+      console.error("❌ Error uploading file:", error);
+      alert("Failed to submit uploaded file.");
     }
   };
+  
   
   return (
     <div className="file-container">

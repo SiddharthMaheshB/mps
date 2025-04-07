@@ -3,7 +3,7 @@ import "./section2.css"
 import {useState,useEffect} from "react"
 import {buildStyles,CircularProgressbarWithChildren} from "react-circular-progressbar"
 import "react-circular-progressbar/dist/styles.css"
-const Analysis = ({severity,pesticide,confidence,image=null})=>{
+const Analysis = ({severity,pesticide,confidence,image=null,crop ="paddy"})=>{
     const [aniSeverity,setAniSeverity] = useState(0);
     useEffect(()=>{
         const ti = setTimeout(()=>setAniSeverity(severity),300);
@@ -41,6 +41,7 @@ const Analysis = ({severity,pesticide,confidence,image=null})=>{
                 </CircularProgressbarWithChildren>
             </div>
             <div className="detail-container">
+                <p>Crop: <strong>{crop}</strong></p>
                 <p>Detected: <strong>{pesticide}</strong></p>
                 <div className="confidence-bar">
                     <div 
