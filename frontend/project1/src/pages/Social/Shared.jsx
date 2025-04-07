@@ -19,7 +19,7 @@ export default function Shared({login}) {
     useEffect(() => {
         // Only redirect if login is explicitly false (not undefined or null)
         if(login === false){
-            navigate('/login');
+            navigate('/');
         }
     }, [login, navigate]);
     
@@ -178,7 +178,7 @@ const SharedContent = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
 
@@ -264,7 +264,7 @@ const SharedContent = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
 
@@ -329,7 +329,7 @@ const SharedContent = () => {
             
             const token = localStorage.getItem('token');
             if (!token) {
-                navigate('/login');
+                navigate('/');
                 return;
             }
 

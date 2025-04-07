@@ -7,7 +7,8 @@ import {
     getGoogleAuthURL,
     logoutUser, 
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    updateUserPassword
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -21,5 +22,6 @@ router.get('/google/callback', googleCallback);
 router.post('/logout', protect, logoutUser);
 router.get('/profile', protect, getUserProfile);
 router.put('/profile/update', protect, updateUserProfile);
+router.put('/profile/password', protect, updateUserPassword);
 
 export default router; 
