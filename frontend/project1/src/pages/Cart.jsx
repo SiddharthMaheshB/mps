@@ -3,6 +3,33 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Cart.css";
 import { useShop } from '../context/ShopContext';
+import carrotImage from './product_images/Fresh Carrots.jpeg';
+import tomatoImage from './product_images/Tamatoes.jpeg';
+import appleImage from './product_images/Organic Apples.jpeg';
+import bananaImage from './product_images/Banana.jpeg';
+import milkImage from './product_images/Daily Milk.jpeg';
+import cheeseImage from './product_images/Cheese.jpeg';
+
+// Product image mapping
+const productImageMap = {
+  'Fresh Carrots': carrotImage,
+  'Tomatoes': tomatoImage,
+  'Organic Apples': appleImage,
+  'Bananas': bananaImage,
+  'Dairy Milk': milkImage,
+  'Cheese': cheeseImage
+};
+
+// Helper function to get product image
+const getProductImage = (product) => {
+  // Use the image from the map if available
+  if (productImageMap[product.name]) {
+    return productImageMap[product.name];
+  }
+  
+  // Fallback to the original image path
+  return product.image.startsWith('http') ? product.image : `/${product.image}`;
+};
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -470,32 +497,39 @@ const Cart = () => {
       ) : (
         <div className="cart-items-container">
           {cartItems.map((item) => (
-              <div key={item._id} className="cart-item">
-                <img 
-                  src={item.product.image.startsWith('http') ? item.product.image : `/${item.product.image}`} 
-                  alt={item.product.name} 
-                  className="cart-item-image"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "/1.png"; // Default image
-                  }}
-                />
+            <div key={item._id} className="cart-item">
+              <img 
+                src={
+                  item.product ? 
+                    getProductImage(item.product) : 
+                    getProductImage({
+                      name: item.name,
+                      image: item.image
+                    })
+                }
+                alt={item.product ? item.product.name : item.name} 
+                className="cart-item-image"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/placeholder-product.jpg";
+                }}
+              />
               <div className="cart-item-details">
-                  <Link to={`/shop/product/${item.product._id}`} style={{ textDecoration: "none", color: "black" }}>
-                    <h3>{item.product.name}</h3>
+                <Link to={`/shop/product/${item.product ? item.product._id : item.productId}`} style={{ textDecoration: "none", color: "black" }}>
+                  <h3>{item.product ? item.product.name : item.name}</h3>
                 </Link>
 
-                  <div className="cart-package">
-                    <div className="package-info">
-                      <p>₹{item.price} per {item.product.unit} × {item.quantity} = ₹{item.price * item.quantity}</p>
-                      <div className="quantity-controls">
-                        <button onClick={() => updateQuantity(item._id, item.quantity - 1)}>-</button>
-                        <span>{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item._id, item.quantity + 1)}>+</button>
-                      </div>
+                <div className="cart-package">
+                  <div className="package-info">
+                    <p>₹{item.price} per {item.product ? item.product.unit : item.unit} × {item.quantity} = ₹{item.price * item.quantity}</p>
+                    <div className="quantity-controls">
+                      <button onClick={() => updateQuantity(item._id || item.productId, item.quantity - 1)}>-</button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => updateQuantity(item._id || item.productId, item.quantity + 1)}>+</button>
                     </div>
-                    <button className="cart-remove-btn" onClick={() => removeItem(item._id)}>✖</button>
                   </div>
+                  <button className="cart-remove-btn" onClick={() => removeItem(item._id || item.productId)}>✖</button>
+                </div>
               </div>
             </div>
           ))}
