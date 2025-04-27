@@ -138,7 +138,8 @@ const Cart = () => {
           unit: item.unit
         },
         price: item.price,
-        quantity: item.quantity
+        quantity: item.quantity,
+        selectedUnit: item.selectedUnit // Add the selectedUnit property
       }));
       
       setCartItems(formattedItems);
@@ -330,7 +331,7 @@ const Cart = () => {
         name: item.product.name,
         quantity: item.quantity,
         price: item.price,
-        unit: item.unit || item.product.unit
+        unit: item.selectedUnit || item.unit || item.product.unit
       }));
       
       // Create a copy of the cart items before clearing
@@ -521,7 +522,7 @@ const Cart = () => {
 
                 <div className="cart-package">
                   <div className="package-info">
-                    <p>₹{item.price} per {item.product ? item.product.unit : item.unit} × {item.quantity} = ₹{item.price * item.quantity}</p>
+                    <p>₹{item.price} per {item.selectedUnit || (item.product ? item.product.unit : item.unit)} × {item.quantity} = ₹{item.price * item.quantity}</p>
                     <div className="quantity-controls">
                       <button onClick={() => updateQuantity(item._id || item.productId, item.quantity - 1)}>-</button>
                       <span>{item.quantity}</span>
