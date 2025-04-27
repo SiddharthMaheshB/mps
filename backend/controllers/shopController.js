@@ -58,7 +58,7 @@ const getCart = asyncHandler(async (req, res) => {
 // @access  Private
 const addToCart = asyncHandler(async (req, res) => {
     const validatedData = cartItemSchema.parse(req.body);
-    const { productId, quantity } = validatedData;
+    const { productId, quantity, price, unit } = validatedData;
     
     // Find the product
     const product = await Product.findById(productId);
@@ -79,9 +79,10 @@ const addToCart = asyncHandler(async (req, res) => {
         });
     }
     
-    // Check if product is already in cart
+    // Check if product is already in cart with same unit
     const existingItemIndex = cart.items.findIndex(
-        item => item.product.toString() === productId
+        item => item.product.toString() === productId && 
+                (!unit || !item.selectedUnit || item.selectedUnit === unit)
     );
     
     if (existingItemIndex > -1) {
@@ -92,7 +93,8 @@ const addToCart = asyncHandler(async (req, res) => {
         cart.items.push({
             product: productId,
             quantity,
-            price: product.price
+            price: price || product.price,
+            selectedUnit: unit || product.unit
         });
     }
     

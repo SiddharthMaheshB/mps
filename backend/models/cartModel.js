@@ -15,6 +15,10 @@ const cartItemSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    selectedUnit: {
+        type: String,
+        default: "1 kg"
     }
 });
 

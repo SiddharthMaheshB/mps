@@ -5,7 +5,11 @@ export const cartItemSchema = z.object({
         .min(1, 'Product ID is required'),
     quantity: z.number()
         .int()
-        .min(1, 'Quantity must be at least 1')
+        .min(1, 'Quantity must be at least 1'),
+    price: z.number()
+        .min(0, 'Price must be non-negative'),
+    unit: z.string()
+        .optional()
 });
 
 export const updateCartItemSchema = z.object({

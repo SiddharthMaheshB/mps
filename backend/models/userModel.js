@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profileImage: {
+        type: String,
+        default: '/uploads/profiles/default-profile.png'
+    },
     mobile: {
         type: String,
         required: false

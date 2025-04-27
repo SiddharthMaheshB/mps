@@ -94,6 +94,9 @@ const ProductCard = ({ product }) => {
         // Generate a unique key that includes product ID and unit
         const itemKey = `${product._id}-${selectedUnit}`;
         
+        // Get the correct image path using the mapping
+        const imagePath = getProductImage(product);
+        
         // Check if product with same unit already exists in cart
         const existingItemIndex = existingCart.findIndex(item => 
           item.productId === product._id && item.selectedUnit === selectedUnit);
@@ -110,7 +113,7 @@ const ProductCard = ({ product }) => {
             productId: product._id,
             name: product.name,
             price: product.price * unitRatio,
-            image: product.image,
+            image: imagePath,
             unit: product.unit,
             selectedUnit: selectedUnit,
             quantity: quantity
